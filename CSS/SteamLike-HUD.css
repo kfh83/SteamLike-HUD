@@ -9,8 +9,8 @@
   		--hud-color: #704700; /* Cor dos elementos do hud (numero do health, armor...) - PADRÃO: #704700 */
 		--chat-color: #FFB41E; /* Cor das mensagens do chat - PADRÃO: #FFB41E */
 		
-		--loading-bg: url('https://github.com/kfh83/crap/blob/main/background.png?raw=true'); /* fundo da tela de carregamento */
-		--loading-ad: url('https://github.com/kfh83/crap/blob/main/valvecontent.png?raw=true'); /* anuncio da tela de carregamento */
+		--loading-bg: url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/background.png?raw=true'); /* fundo da tela de carregamento */
+		--loading-ad: url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/valvecontent.png?raw=true'); /* anuncio da tela de carregamento */
 		
 		--use-pfp: none; /* Habilitar fotos de perfil fake do lado do usuário. none = desabilitado, inline-block: habilitado */
 	}
@@ -154,7 +154,7 @@
 	}
 
 	.hud-radar-circle {
-		background: url("https://github.com/kfh83/crap/blob/main/radar-transparent.png?raw=true") no-repeat center;
+		background: url("https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/radar.png?raw=true") no-repeat center;
 		border: unset;
 		width: 127px;
 		height: 127px;
@@ -468,7 +468,7 @@
     	display: inline-block;
     	width: 16px; 
     	height: 16px; 
-    	background-image: url('https://github.com/kfh83/crap/blob/main/Icon2.png?raw=true'); 
+    	background-image: url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/steam-icon.png?raw=true'); 
     	background-size: cover; 
     	vertical-align: middle; 
 	}
@@ -800,7 +800,7 @@
     	display: inline-block;
     	width: 16px; 
     	height: 16px; 
-    	background-image: url('https://github.com/kfh83/crap/blob/main/Icon2.png?raw=true'); 
+    	background-image: url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/steam-icon.png?raw=true'); 
     	background-size: cover; 
     	vertical-align: middle;
 		margin-right: 5px;
@@ -892,7 +892,7 @@
     	display: inline-block;
     	width: 16px; 
     	height: 16px; 
-    	background-image: url('https://github.com/kfh83/crap/blob/main/Icon2.png?raw=true'); 
+    	background-image: url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/steam-icon.png?raw=true'); 
     	background-size: cover; 
     	vertical-align: middle;
 		margin-right: 5px;
@@ -1088,7 +1088,7 @@
     	height: 32px;
 		margin-left: 20px;
 		margin-right: 5px;
-    	background-image: url('https://github.com/kfh83/crap/blob/main/pfp.jpg?raw=true'); 
+    	background-image: url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/pfp.jpg?raw=true'); 
     	background-size: cover; 
     	vertical-align: middle;
 	}
@@ -1120,7 +1120,7 @@
 		min-height: 60px;
 		height: 96px;
 		width: 384px;
-		background: url('https://github.com/kfh83/crap/blob/main/blackbox-banner.png?raw=true');
+		background: url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/orangebox-banner.png?raw=true');
 		background-size: 100% auto;
 		position: absolute;
 		display: flex;
@@ -1158,7 +1158,7 @@
 	.classic-health-indicator div{
 		height: 25px;
 		width: 19px;
-		background-image: url('https://github.com/kfh83/crap/blob/main/hud-spritesheet-orange.png?raw=true');
+		background-image: url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/hud-spritesheet.png?raw=true');
 		flood-color: #704700;
 	}
 	
@@ -1184,7 +1184,7 @@
 	.classic-money-indicator div{
 		height: 25px;
 		width: 19px;
-		background-image: url('https://github.com/kfh83/crap/blob/main/hud-spritesheet-orange.png?raw=true');
+		background-image: url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/hud-spritesheet.png?raw=true');
 		flood-color: #704700;
 	}
 	
@@ -1235,7 +1235,7 @@
 	.classic-armor-indicator div{
 		height: 25px;
 		width: 19px;
-		background-image: url('https://github.com/kfh83/crap/blob/main/hud-spritesheet-orange.png?raw=true');
+		background-image: url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/hud-spritesheet.png?raw=true');
 		flood-color: #704700;
 	}
 	
@@ -1262,7 +1262,7 @@
 	.classic-time-indicator div{
 		height: 25px;
 		width: 19px;
-		background-image: url('https://github.com/kfh83/crap/blob/main/hud-spritesheet-orange.png?raw=true');
+		background-image: url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/hud-spritesheet.png?raw=true');
 		flood-color: #704700;
 	}
 	
@@ -1311,7 +1311,7 @@
 	.classic-ammo-indicator div{
 		height: 25px;
 		width: 19px;
-		background-image: url('https://github.com/kfh83/crap/blob/main/hud-spritesheet-orange.png?raw=true');
+		background-image: url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/hud-spritesheet.png?raw=true');
 	}
 	
 	.hud-ammo-separator{
@@ -1326,7 +1326,7 @@
 	
 	
 	.hud-defuser-icon, .hud-buyzone-icon, .hud-c4-icon{
-		background-image: url('https://github.com/kfh83/crap/blob/main/hud-spritesheet-orange.png?raw=true');
+		background-image: url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/hud-spritesheet.png?raw=true');
 		color: transparent !important;
 		width: 32px !important;
 		height: 32px !important; 
@@ -1431,7 +1431,7 @@
 	.hud-spec-time-icon{
 		height: 16px;
 		width: 16px;
-		background: url('https://github.com/kfh83/crap/blob/main/timer.png?raw=true');
+		background: url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/timer.png?raw=true');
 	}
 	
 	.hud-spec-time-host{
@@ -1466,7 +1466,7 @@
 	/* scope */
 	
 	.hud-zoom-overlay-redpoint{
-		background: url('https://github.com/kfh83/crap/blob/main/scope.png?raw=true');
+		background: url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/scope.png?raw=true');
 		border-radius: unset;
 		height: 256px;
 		width: 256px;
@@ -1530,7 +1530,7 @@
 	}
 	
 	.money_plus div, .money_minus div{
-		background-image: url('https://github.com/kfh83/crap/blob/main/hud-spritesheet-orange.png?raw=true');
+		background-image: url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/hud-spritesheet.png?raw=true');
 		height: 25px;
 		width: 19px;
 	}

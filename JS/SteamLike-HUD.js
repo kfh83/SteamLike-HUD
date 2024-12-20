@@ -198,7 +198,7 @@ const classicSpectatorTopBar = document.createElement('div'); classicSpectatorTo
     const bannerImg = document.createElement('img'); bannerImg.classList.add('hud-spec-banner-image'); specOrangeBox.appendChild(bannerImg);
     classicSpectatorTopBar.appendChild(specOrangeBox);
     
-    bannerImg.src = "https://github.com/kfh83/crap/blob/main/blackbox-banner.png?raw=true"
+    bannerImg.src = "https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/orangebox-banner.png?raw=true"
     
     const specDetails = document.createElement('div'); specDetails.classList.add('hud-spec-details'); classicSpectatorTopBar.appendChild(specDetails);
         const specLeftSide = document.createElement('div'); specLeftSide.classList.add('hud-spec-left-side'); specDetails.appendChild(specLeftSide);
@@ -868,21 +868,21 @@ document.addEventListener('pointerlockchange', pointerlockchange, false);
 
 const spritesheet = document.createElement("div"); spritesheet.classList.add("spritesheet");
 document.querySelector("#loading_blocker").appendChild(spritesheet);
-spritesheet.style.background = "url('https://github.com/kfh83/crap/blob/main/hud-spritesheet-orange.png?raw=true')";
+spritesheet.style.background = "url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/hud-spritesheet.png?raw=true')";
 spritesheet.style.width = '0px';
 spritesheet.style.height = '0px';
 spritesheet.style.padding = '0';
 
 const radar = document.createElement("div"); radar.classList.add("radar");
 document.querySelector("#loading_blocker").appendChild(radar);
-radar.style.background = "url('https://github.com/kfh83/crap/blob/main/radar-transparent.png?raw=true')";
+radar.style.background = "url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/radar.png?raw=true')";
 radar.style.width = '0px';
 radar.style.height = '0px';
 radar.style.padding = '0';
 
 const scope = document.createElement("div"); scope.classList.add("scope");
 document.querySelector("#loading_blocker").appendChild(scope);
-scope.style.background = "url('https://github.com/kfh83/crap/blob/main/scope.png?raw=true')";
+scope.style.background = "url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/scope.png?raw=true')";
 scope.style.width = '0px';
 scope.style.height = '0px';
 scope.style.padding = '0';

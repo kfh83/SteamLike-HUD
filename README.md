@@ -1,4 +1,4 @@
-## SteamLike HUD - a HUD modification for PLAY-CS
+![image](https://github.com/user-attachments/assets/ea7af0bf-97aa-459f-99ba-f16370eec3a3)## SteamLike HUD - a HUD modification for PLAY-CS
 
 **WARNING: This project is currently a work in progress. Expect issues.**
 
@@ -43,26 +43,33 @@
 
 
 ## Q & A
-**What is this?**
+**Q: What is this?**
 
-These are JS/CSS files that allow for a more vanilla-like interface in PLAY-CS.
+**A:** These are JS/CSS files that allow for a more vanilla-like interface in PLAY-CS.
 
-**Does this provide any competitive advantages?**
+**Q: Does this provide any competitive advantages?**
 
-Not at all. If anything, this may have disadvantages (missing top-bound player count, etc), so this is pretty much up to you to use.
+**A:** Not at all. If anything, this may have disadvantages (missing top-bound player count, etc), so this is pretty much up to you to use.
 
-**Am i going to get banned if i get caught using this?**
+**Q: Am i going to get banned if i get caught using this?**
 
-Nope. In fact, the game creator nosferati has actually approved the use of such modifications, as long as they don't provide an advantage:
+**A:** Nope. In fact, the game creator nosferati has actually approved the use of such modifications, as long as they don't provide an advantage:
 ![image](https://github.com/user-attachments/assets/ca40a836-1247-4d65-878d-7ee5c8e60612)
 
-**X HUD element is a few pixels off/doesn't look accurate!**
+**Q: Is this allowed in tournament play?**
 
-Again, this project is still very much a work in progress, and many things might be unfinished/unthemed. As for certain elements being a bit off, there is a certain amount personal takes and artistic liberties at play here so do keep that in mind, however if you can contribute with more accurate renditions, i'll be glad to review and accept.
+**A:** No:
 
-**Where is my C4 timer???**
+![image](https://github.com/user-attachments/assets/5d9ecdaa-86fc-4a7d-afcf-7c3e1c7349e5)
 
-Disabled in the meantime that i don't figure out a way to style it faithfully to the rest of the UI. You can reenable it by removing the following bit of code from the CSS:
+
+**Q: X HUD element is a few pixels off/doesn't look accurate!**
+
+**A:** Again, this project is still very much a work in progress, and many things might be unfinished/unthemed. As for certain elements being a bit off, there is a certain amount personal takes and artistic liberties at play here so do keep that in mind, however if you can contribute with more accurate renditions, i'll be glad to review and accept.
+
+**Q: Where is my C4 timer???**
+
+**A:** Disabled in the meantime that i don't figure out a way to style it faithfully to the rest of the UI. You can reenable it by removing the following bit of code from the CSS:
 ```css
 	/* remove */
 	.hud-bomb-planted{
@@ -70,9 +77,9 @@ Disabled in the meantime that i don't figure out a way to style it faithfully to
 	}
 ```
 
-**Why is the code so ugly?**
+**Q: Why is the code so ugly?**
 
-Firstly, this is my first project with CSS/JS and my experience is at most of a few weeks in each. I'm also working on a cleanup of both files (JS is mostly cleaned up). Again, if you wish to contribute in the cause, PRs are open!
+**A:** Firstly, this is my first project with CSS/JS and my experience is at most of a few weeks in each. I'm also working on a cleanup of both files (JS is mostly cleaned up). Again, if you wish to contribute in the cause, PRs are open!
 
 ## Credits
 @kfh83 - Project creator

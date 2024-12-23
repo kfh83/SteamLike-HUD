@@ -58,7 +58,7 @@
 
 **Q: Is this allowed in tournament play?**
 
-**A:** No:
+**A:** No, only in public servers (4fun, MIX):
 
 ![image](https://github.com/user-attachments/assets/5d9ecdaa-86fc-4a7d-afcf-7c3e1c7349e5)
 

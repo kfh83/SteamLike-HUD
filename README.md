@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/ea7af0bf-97aa-459f-99ba-f16370eec3a3)## SteamLike HUD - a HUD modification for PLAY-CS
+## SteamLike HUD - a HUD modification for PLAY-CS
 
 **WARNING: This project is currently a work in progress. Expect issues.**
 

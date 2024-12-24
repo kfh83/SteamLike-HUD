@@ -17,6 +17,13 @@ if(pWordScreen && pWordField){    // need to check otherwise the script bombs la
     pWordScreen.appendChild(pwLabel);
 }
 
+const buttonHost = document.createElement('div'); buttonHost.classList.add('loading-buttons'); pWordScreen.appendChild(buttonHost);
+    const exitButton = document.createElement('a'); exitButton.classList.add('lobby-button'); buttonHost.appendChild(exitButton); exitButton.innerText = 'Cancel'; // i already did cancelButton... oops !
+        exitButton.setAttribute('href', '//play-cs.com');   // back to server list
+    const connectButton = document.createElement('a'); connectButton.classList.add('connect-button'); buttonHost.appendChild(connectButton); connectButton.innerText = 'Connect';
+        connectButton.setAttribute('href', 'javascript:void(0);');
+        connectButton.setAttribute('onclick', 'if (!window.__cfRLUnblockHandlers) return false; document.getElementById(\'form-code\').submit(); return false;');   // pretty much entirely copied from the original button, just submits the form
+
 // win text
 
 document.querySelector(".hud-win-image-tr").remove();   // remove existing tr/ct win images...
@@ -35,8 +42,6 @@ ctElement.classList.add("hud-win-image-ct");
 ctElement.innerText = "Counter-Terrorists Win!";
 ctElement.style.display = "none";
 hudWin.appendChild(ctElement);
-
-
 
 
 // tab -- i wish to redo the game tab entirely in JS so i don't have to rely in the stupid and ugly hacks following:
@@ -631,8 +636,9 @@ const checkClientModule = setInterval(() => {   // we are checking every second.
                 classicSpectatorTopBar.style.display = 'none';
                 classicSpectatorBottomBar.style.display = 'none';
                 moneyDiffHost.style.display = 'flex';
-        }
+            }
         
+        }
         // weapon/ammo handling
         
         Module._MsgFunc_CurWeaponJS = function(iState, iId, iClip, iCount){
@@ -712,9 +718,8 @@ const checkClientModule = setInterval(() => {   // we are checking every second.
             
         }   
             
-            
         
-        }
+        
         
         // this is needed to update the reserve ammunition indicator
     
@@ -852,11 +857,14 @@ function ge(id) {
 }
 
 var pointerlockchange = function () {
+    document.querySelector(".exit-button").style.removeProperty('display');
     if (document.pointerLockElement === canvas_elem) {
         document.querySelector(".exit-button").style.display = 'none';
+        document.querySelector("#amxmodmenu").style.display = 'none';
     } else {
         pointerLockActive = false;
         document.querySelector(".exit-button").style.display = 'block';
+        document.querySelector("#amxmodmenu").style.display = 'block';  // its inline-block by default for some reason.. 
     }
 };
 

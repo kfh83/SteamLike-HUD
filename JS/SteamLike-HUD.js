@@ -1,12 +1,12 @@
 // SteamLike HUD : by KfH-- and Henri (hen.fs), parts of code by nosferati (author of PLAY-CS)
-// Last updated: 20/12/2024
+// Last updated: 30/12/2024
 
 // TO DO: de-jQuerify the living hell out of this codebase
 
 // options
 
 var net_graph = 0;      // Enables net_graph. NOTICE: the "in", "out", "loss" and "choke" values are purely cosmetic, They don't mean anything. The only real values are the FPS and ping.
-var net_graphpos = 2;   // Sets the position of the net graph. 1 = Right, 2 = Center, 3 = Left
+var net_graphpos = 1;   // Sets the position of the net graph. 1 = Right, 2 = Center, 3 = Left
 
 // password screen
 const pWordScreen = document.querySelector('#server_full'); // AFAIK #server_full2 are the ACTUAL server full/kick screens
@@ -45,6 +45,7 @@ hudWin.appendChild(ctElement);
 
 
 // tab -- i wish to redo the game tab entirely in JS so i don't have to rely in the stupid and ugly hacks following:
+// 30/12 -- REJOICE! game tab is entirely redone. TO DO: remove this crap
 
 const ctScore = document.querySelector(".hud-scoreboard .scoreboard-hud-ct-head tr th:first-child");
 ctScore.childNodes.forEach(node => {
@@ -74,9 +75,9 @@ setInterval(() => {
 // server name instead of player header
 
 const servernameFake = document.querySelector(".scoreboard-hud-common-head tr th:nth-child(2)"); // lvl
-const servernameReal = document.querySelector(".server_name");
+const serverNameOriginal = document.querySelector(".server_name");
 
-servernameFake.innerText = servernameReal.innerText;
+servernameFake.innerText = serverNameOriginal.innerText;
 
 
 // loading screen cancel button
@@ -88,27 +89,6 @@ cancelButton.innerText = "Cancel";
 document.querySelector(".loading-main").insertBefore(cancelButton, document.querySelector(".loading_control_block"));
 
 
-// TO DO: this can definitely be done with game funcs.
-
-/*
-const orangeboxBanner = document.createElement("div");
-orangeboxBanner.classList.add("tab-orangebox-banner");
-document.querySelector(".hud-container").insertBefore(orangeboxBanner, document.querySelector(".hud-scoreboard"));
-document.querySelector(".tab-orangebox-banner").style.display = 'none';
-
-function toggleDisplayOnTab(event) {
-    if (event.key === "Tab") {
-        if (event.type === 'keydown') {
-            document.querySelector(".tab-orangebox-banner").style.display = 'flex';
-        } else if (event.type === 'keyup') {
-            document.querySelector(".tab-orangebox-banner").style.display = 'none';
-        }
-    }
-}
-
-document.addEventListener('keydown', toggleDisplayOnTab);
-document.addEventListener('keyup', toggleDisplayOnTab);
-*/
 
 
 // variables used later on in game functionality.
@@ -361,6 +341,205 @@ const netGraphHost = document.createElement('div'); netGraphHost.classList.add('
     netGraphUpdate();   // check to do on netGraphUpdate.
     
     netGraphLossChoke.innerText = 'loss: 0 choke: 0';   // Might aswell keep them at 0... no way to check for this.
+    
+const hudMessageInput = document.querySelector('.hud-message-input');
+const hudMessages = document.querySelector('.hud-chat-messages');
+const hudDeath = document.querySelector('.hud-deaths');
+const hudServerMessage = document.querySelector('.hud-server-message');
+const hudStatusBar = document.querySelector('.hud-statusbar');
+const hudC4Message = document.querySelector('.hud-message');
+
+// SCOREBOARD - 30/12
+// TO DO: profile pictures
+
+const hudContainer = document.querySelector(".hud-container");  // HUD elements container
+
+const scoreboardHost = document.createElement('div'); scoreboardHost.classList.add('hud-classic-scoreboard'); hudContainer.appendChild(scoreboardHost);                 // actual tab container
+    const topHeader = document.createElement('div'); topHeader.classList.add('hud-scoreboard-top-header'); scoreboardHost.appendChild(topHeader);                       // generic headers container
+        const serverName = document.createElement('div'); serverName.classList.add('hud-scoreboard-server-name'); topHeader.appendChild(serverName);                    // server name (left bound)
+            serverName.innerText = serverNameOriginal.innerText;    // defined in main JS
+        const scoreHeader = document.createElement('div'); scoreHeader.classList.add('hud-scoreboard-scores'); topHeader.appendChild(scoreHeader);                      // "score" header (right bound)
+            scoreHeader.innerText = 'Score';
+        const deathHeader = document.createElement('div'); deathHeader.classList.add('hud-scoreboard-deaths'); topHeader.appendChild(deathHeader);                      // "deaths" header (right bound)
+            deathHeader.innerText = 'Deaths';
+        const latencyHeader = document.createElement('div'); latencyHeader.classList.add('hud-scoreboard-latency'); topHeader.appendChild(latencyHeader);               // "latency" header (right bound)
+            latencyHeader.innerText = 'Latency';
+    const counterHeader = document.createElement('div'); counterHeader.classList.add('hud-scoreboard-ct-header'); scoreboardHost.appendChild(counterHeader);            // Counter-Terrorists header container
+        const ctPlayerCount = document.createElement('div'); ctPlayerCount.classList.add('hud-scoreboard-ct-count'); counterHeader.appendChild(ctPlayerCount);          // "Counter-Terrorists  -   X players"
+            ctPlayerCount.textContent = 'Counter-Terrorists\u00A0\u00A0\u00A0\u00A0-\u00A0\u00A0\u00A0\u00A0';      // gets switched out later, this is just a placeholder
+        const ctRoundScore = document.createElement('div'); ctRoundScore.classList.add('hud-scoreboard-ct-score'); counterHeader.appendChild(ctRoundScore);             // Counter-Terrorists win count
+            ctRoundScore.innerText = '-';                                                                           // gets switched out later, this is just a placeholder
+        const ctLatencies = document.createElement('div'); ctLatencies.classList.add('hud-scoreboard-ct-latency'); counterHeader.appendChild(ctLatencies);              // latency average on Counter-Terrorist team
+            ctLatencies.innerText = '-';                                                                            // gets switched out later, this is just a placeholder
+    
+    const counterPlayers = document.createElement('div'); counterPlayers.classList.add('hud-scoreboard-ct-players'); scoreboardHost.appendChild(counterPlayers);        // Counter-Terrorists player container
+
+    const terroristHeader = document.createElement('div'); terroristHeader.classList.add('hud-scoreboard-tr-header'); scoreboardHost.appendChild(terroristHeader);      // Terrorists header container
+        const trPlayerCount = document.createElement('div'); trPlayerCount.classList.add('hud-scoreboard-tr-count'); terroristHeader.appendChild(trPlayerCount);        // "Terrorists  -   X players"
+            trPlayerCount.textContent = 'Terrorists\u00A0\u00A0\u00A0\u00A0-\u00A0\u00A0\u00A0\u00A0';              // gets switched out later, this is just a placeholder
+        const trRoundScore = document.createElement('div'); trRoundScore.classList.add('hud-scoreboard-tr-score'); terroristHeader.appendChild(trRoundScore);           // Terrorists win count
+            trRoundScore.innerText = '-';                                                                           // gets switched out later, this is just a placeholder
+        const trLatencies = document.createElement('div'); trLatencies.classList.add('hud-scoreboard-tr-latency'); terroristHeader.appendChild(trLatencies);            // latency average on Terrorists team
+            trLatencies.innerText = '-';                                                                            // gets switched out later, this is just a placeholder
+    
+    const terroristPlayers = document.createElement('div'); terroristPlayers.classList.add('hud-scoreboard-tr-players'); scoreboardHost.appendChild(terroristPlayers);  // Terrorists player container
+    
+
+// partial rewrite of updateScoreBoard
+
+function refreshScoreboard(){
+    
+    counterPlayers.innerHTML = '';      // done in similar fashion to the original function, except with pure JS
+    terroristPlayers.innerHTML = '';    // this clears out the terrorist/counter-terrorist player list prior to anything. This is kinda hacky
+    
+    var players = [];   // presumably gets filled up later with the each statement
+    
+    var skill_total = {     // this is the actual sum of the skill in each team
+        1: 0,   // tr skill total
+        2: 0    // ct skill total
+    };
+    
+    var players_total = {   // number of players in each team
+        1: 0,   // tr count
+        2: 0    // ct count
+    };
+    
+    var latency_total = {   // latency total in each team
+        1: 0,   // tr latencies
+        2: 0    // ct latencies
+    };
+    
+    
+    Object.entries(g_PlayerExtraInfo).forEach(([id, player]) => {
+        if (typeof(g_TeamInfo[player.id]) !== 'undefined') { 
+            players.push({
+                id: id,
+                frags: player.frags * 1         // why is it being multiplied by 1
+            });
+        }
+    });
+    
+    players.sort( function compare( a, b ) {    // sorting the array by frags. Formerly "rank" but that name coincides with actual player rank.
+        if ( a.frags > b.frags ){               // btw this function is horrible but i didn't make it LOL!
+            return -1;
+        }
+        if ( a.frags < b.frags ){
+            return 1;
+        }
+        return 0;
+    });
+    
+    // memberInfo.name = player name
+    // memberInfo.status = dead/bomb/vip?
+    // memberInfo.frags = player score
+    // memberInfo.deaths = player deaths
+    // memberInfo.ping = player latency
+
+    
+    players.forEach(function(player, index){   // original had a "dummy" argument, which is the index
+        var style="background: none;";   // sets inline styles on the td of the player, however we aren't using tables. Will see what to do about this
+        var id = player.id; // the id of the player passed through the function
+        var memberInfo = g_PlayerExtraInfo[id]; // see comments before this statement
+        
+        if (memberInfo.teamnumber !== "undefined" && memberInfo.skill != '-') {     // if member is in a team and their skill is properly defined (takes a while for this to be defined)
+            skill_total[memberInfo.teamnumber] += memberInfo.skill;     // adds this member's skill to the skill_total of their team
+            latency_total[memberInfo.teamnumber] += Number(memberInfo.ping);    // adds this member's latency to the latency_total of their team. Needs to be converted to a number in this case because its a string in nature
+            
+            players_total[memberInfo.teamnumber]++;     // ups the counts of players in member's team
+        }
+        
+        if(!memberInfo.name){   // if the member has no name
+            return;     // ... goodbye?
+        }
+        
+        
+        if (id == CS_ENV.myXashId) { // if the id matches with your own id...
+            style = 'background: rgba(255, 255, 255, 0.1);';
+        }
+        
+        // for each, we are going to append a player...
+        
+        const playerHost = document.createElement('div'); playerHost.classList.add('hud-scoreboard-player');    // this is done here because of interference when done outside w/ a cloned node
+            const playerName = document.createElement('div'); playerName.classList.add('hud-scoreboard-player-playername'); playerHost.appendChild(playerName);
+            const playerIndicator = document.createElement('div'); playerIndicator.classList.add('hud-scoreboard-player-status'); playerHost.appendChild(playerIndicator);
+            const playerScore = document.createElement('div'); playerScore.classList.add('hud-scoreboard-player-score'); playerHost.appendChild(playerScore);
+            const playerDeath = document.createElement('div'); playerDeath.classList.add('hud-scoreboard-player-deaths'); playerHost.appendChild(playerDeath);
+            const playerLatency = document.createElement('div'); playerLatency.classList.add('hud-scoreboard-player-latency'); playerHost.appendChild(playerLatency);
+            
+        playerName.innerText = memberInfo.name;
+        if(typeof memberInfo.status !== 'undefined'){
+            playerIndicator.innerText = memberInfo.status;  // somehow you can get stuck between heaven and hell in counter strike and be undefined
+        }
+        playerScore.innerText = memberInfo.frags;
+        playerDeath.innerText = memberInfo.deaths;
+        playerLatency.innerText = memberInfo.ping;
+        
+        playerHost.setAttribute('style', style);    // could definitely be done better, i'm just following kinda what the original code did here
+        
+        if(memberInfo.teamnumber == 1){
+            playerHost.classList.add('tr-color');   // might aswell just use the classes provided by existing code
+            terroristPlayers.appendChild(playerHost);
+        } else if(memberInfo.teamnumber == 2){
+            playerHost.classList.add('ct-color');
+            counterPlayers.appendChild(playerHost);
+        }
+        
+    });
+    
+    trPlayerCount.textContent = 'Terrorists\u00A0\u00A0\u00A0\u00A0-\u00A0\u00A0\u00A0\u00A0' + players_total[1] + ' players';
+    ctPlayerCount.textContent = 'Counter-Terrorists\u00A0\u00A0\u00A0\u00A0-\u00A0\u00A0\u00A0\u00A0' + players_total[2] + ' players';
+    
+    ctRoundScore.innerText = ctScore.innerText;     // defined in main JS
+    trRoundScore.innerText = trScore.innerText;     // defined in main JS
+    
+    let ctLatencyAverage = Math.round(latency_total[2] / players_total[2]);
+    let trLatencyAverage = Math.round(latency_total[1] / players_total[1]);
+    
+    if(!Number.isNaN(ctLatencyAverage)){
+        ctLatencies.innerText = ctLatencyAverage;
+    }
+    
+    if(!Number.isNaN(trLatencyAverage)){
+        trLatencies.innerText = trLatencyAverage;
+    }
+}
+
+
+let intervalId = null;
+intervalId = setInterval(() => {    // until i find a game func thats suitable to replace this we are going to update every 350ms (very bad for performance)
+    refreshScoreboard();
+}, 350); 
+
+function toggleDisplayOnTab(event) {
+    if (event.key === "Tab") {
+        if (event.type === 'keydown') {
+            scoreboardHost.style.display = 'flex';
+        } else if (event.type === 'keyup') {
+            scoreboardHost.style.display = 'none';
+        }
+    }
+}
+
+document.addEventListener('keydown', toggleDisplayOnTab);
+document.addEventListener('keyup', toggleDisplayOnTab);
+
+
+// elements that use the same font style, queued up to have their styles changed
+const fontUpdateElements = [
+    netGraphHost,
+    scoreboardHost,
+    ctElement,
+    trElement,
+    classicSpectatorTopBar,
+    classicSpectatorBottomBar,
+    hudMessageInput,
+    hudMessages,
+    hudDeath,
+    hudServerMessage,
+    hudStatusBar,
+    hudC4Message
+];
+
 
 // function overrides and game functionality
 
@@ -843,6 +1022,10 @@ const checkClientModule = setInterval(() => {   // we are checking every second.
 }, 1000)
 
 
+
+
+
+
 // disable home button when pointer locked -- mostly copied from pointerlock.js
 // since i can't (for some unknown reason) completely override pointerlock, i can use this to my advantage and only do what i need
 
@@ -869,6 +1052,56 @@ var pointerlockchange = function () {
 };
 
 document.addEventListener('pointerlockchange', pointerlockchange, false);
+
+
+function updateFontStyle(elementRef) {
+    const width = window.innerWidth;    // viewport width
+    const height = window.innerHeight;  // viewport height
+
+    let fontFamily = '';
+    let fontSize = '';
+    let fontWeight = '';
+    let letterSpacing = '';
+
+    if (width >= 1024 && height >= 768) {
+        // For 1024x768 and above
+        fontFamily = 'Verdana';
+        fontSize = '9pt';
+        fontWeight = '600';
+
+    } else if (width >= 800 && height >= 600) {
+        // For 800x600
+        fontFamily = 'Tahoma';
+        fontSize = '8pt';
+        fontWeight = '600';
+        letterSpacing = '1px';
+    } else if (width >= 640 && height >= 480) {
+        // For 640x480
+        fontFamily = 'Tahoma';
+        fontSize = '7pt';
+        fontWeight = '600';
+        letterSpacing = '1px';
+    }
+
+    // apply styles
+    elementRef.style.fontFamily = fontFamily;
+    elementRef.style.fontSize = fontSize;
+    elementRef.style.fontWeight = fontWeight;
+    elementRef.style.letterSpacing = letterSpacing;
+}
+
+
+
+window.addEventListener("load", function() {
+    fontUpdateElements.forEach(updateFontStyle);
+});
+
+window.addEventListener("resize", function() {
+    fontUpdateElements.forEach(updateFontStyle);
+});
+
+
+
 
 
 // hacky ass mitigations for slow image loading, don't ask why its done this way

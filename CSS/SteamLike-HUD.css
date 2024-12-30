@@ -1,1725 +1,1862 @@
-	/* SteamLike HUD - By: KfH--, Henri (hen.fs), TRACK */
-	/* Last updated: 20/12/2024 */
-
-	/* TODO: MAJOR cleanup, commenting */
-
-	@import url('https://fonts.cdnfonts.com/css/seven-segment');
-	/* fonte temporaria, mas mais parecida com a do 1.6 */
-
-	:root {
-		--hud-color: #704700;
-		/* Cor dos elementos do hud (numero do health, armor...) - PADRÃO: #704700 */
-		--chat-color: #FFB41E;
-		/* Cor das mensagens do chat - PADRÃO: #FFB41E */
-
-		--loading-bg: url('https://github.com/kfh83/crap/blob/main/background.png?raw=true');
-		/* fundo da tela de carregamento */
-		--loading-ad: url('https://github.com/kfh83/crap/blob/main/valvecontent.png?raw=true');
-		/* anuncio da tela de carregamento */
-
-		--use-pfp: none;
-		/* Habilitar fotos de perfil fake do lado do usuário. none = desabilitado, inline-block: habilitado */
-	}
-
-	.pointerlock_overlay {
-		/* melhor pra trabalhar, não serve nenhuma utilidade */
-		z-index: 0 !important;
-	}
-
-	.ui_layer {
-		color: transparent !important;
-	}
-
-	.hud-guest-banner {
-		display: none;
-	}
-
-	.hud-grad-left {
-		background: unset;
-	}
-
-	.hud-grad-right {
-		background: unset;
-		border-top: unset;
-		color: var(--hud-color);
-		mix-blend-mode: plus-lighter;
-		font-family: 'Seven Segment', sans-serif !important;
-		font-weight: bold;
-	}
-
-	.hud-ammo-rest hud-value {
-		margin-left: 10px;
-	}
-
-	.hud-weapons {
-		display: none;
-	}
-
-	.server_skill {
-		display: none !important;
-	}
-
-
-	.hud-money {
-		color: var(--hud-color);
-		mix-blend-mode: plus-lighter;
-		top: unset;
-		bottom: 50px;
-		left: unset;
-		right: 15px;
-		text-align: right;
-		height: auto;
-		width: auto;
-		display: flex;
-		flex-direction: column;
-		flex-wrap: wrap;
-	}
-
-	.hud-money .hud-value {
-		display: none;
-	}
-
-	.hud-money .fa-usd {
-		display: none;
-	}
-
-
-	.hud-money .money_minus,
-	.money_plus {
-		order: 1;
-		font-family: 'Seven Segment', sans-serif !important;
-	}
-
-	.hud-ammo {
-		text-align: right;
-		right: 15px;
-		bottom: 5px;
-		display: none;
-	}
-
-	.hud-value {
-		font-family: 'Seven Segment', sans-serif !important;
-		font-weight: bold;
-	}
-
-	.hud-value::before {
-		font-size: 30px;
-		padding-bottom: 3px;
-		right: 110px;
-		position: fixed;
-	}
-
-	.hud-ammo span {
-		bottom: unset;
-	}
-
-	.hud-ammo-rest {
-		margin-left: 15px;
-	}
-
-	.hud-health-armor {
-		display: none;
-	}
-
-	.hud-health-armor .hud-icon {
-		color: var(--hud-color);
-		margin-left: 5px;
-	}
-
-	.hud-timer-val,
-	.hud-health .hud-val {
-		margin-top: 3px;
-		color: var(--hud-color);
-		font-family: 'Seven Segment', sans-serif;
-		font-weight: bold;
-	}
-
-	.hud-armor .hud-val {
-		color: var(--hud-color) !important;
-		font-family: 'Seven Segment', sans-serif;
-		font-weight: bold;
-		margin-top: 3px;
-	}
-
-
-	.hud-credits {
-		display: none;
-	}
-
-
-
-	.hud-buyzone-icon {
-		position: fixed;
-		left: 5px;
-		top: 45%;
-	}
-
-	.hud-defuser-icon,
-	.hud-c4-icon {
-		mix-blend-mode: plus-lighter;
-	}
-
-	.hud-defuse-kit {
-		top: 40%
-	}
-
-	.hud-bomb {
-		top: 35%
-	}
-
-	.hud-radar-circle {
-		background: url("https://github.com/kfh83/crap/blob/main/radar-transparent.png?raw=true") no-repeat center;
-		border: unset;
-		width: 127px;
-		height: 127px;
-		border-radius: 0px;
-	}
-
-	.hud-radar {
-		top: 0px;
-		left: 0px;
-		position: fixed;
-		z-index: 12;
-	}
-
-	.hud-radar-vert {
-		display: none;
-
-	}
-
-	.hud-radar-horiz {
-		display: none;
-	}
-
-	.hud-team-score {
-		position: fixed;
-		left: 50%;
-		top: unset;
-		bottom: 10px;
-		z-index: 12;
-
-		width: 200px;
-		margin-left: -100px;
-		text-align: center;
-		text-shadow: 1px 1px 2px rgba(0, 0, 0, 1);
-		mix-blend-mode: plus-lighter;
-		background: unset;
-	}
-
-	.hud-timer-val {
-		color: var(--hud-color);
-		font-size: 38px;
-		display: none;
-	}
-
-	.hud-live-block {
-		display: none;
-	}
-
-	.hud-ads {
-		display: none;
-	}
-
-
-	/* server message */
-	.hud-server-message {
-		background: unset !important;
-		border-top: unset;
-		border-bottom: unset;
-		font-family: 'Verdana';
-		font-size: 9pt !important;
-		font-weight: bold;
-		text-shadow: 1px 1px 0px black;
-		color: #FFB41E !important;
-	}
-
-
-	/* chat */
-	.hud-chat-messages {
-		font-family: 'Verdana';
-		font-size: 9pt;
-		font-weight: bold;
-		text-shadow: 1px 1px 0px black;
-		top: 70%;
-		padding: unset;
-		-webkit-font-smoothing: none;
-	}
-
-	.hud-chat-messages {
-		color: var(--chat-color) !important;
-	}
-
-	.hud-chat-message-old {
-		display: none !important;
-		/* controverso, mas o cs1.6 não tinha msg antiga. */
-	}
-
-	.hud-message-input {
-		color: var(--chat-color) !important;
-		font-family: 'Verdana';
-		font-size: 9pt;
-		font-weight: bold;
-		text-shadow: 1px 1px 0px black;
-		top: 0;
-		padding: unset;
-
-	}
-
-	.hud-message-input input,
-	.hud-message-input label {
-		color: var(--chat-color) !important;
-		font-family: 'Verdana';
-		font-size: 9pt;
-		font-weight: bold;
-		text-shadow: 1px 1px 0px black;
-		caret-color: transparent;
-	}
-
-	.hud-message-input input:focus {
-		box-shadow: unset;
-	}
-
-	/* buy menu */
-	.hud-buy-menu,
-	.hud-menu-text,
-	.hud-buy-menu-title {
-		background: unset !important;
-		text-align: left;
-		text-shadow: unset;
-	}
-
-	.t-list,
-	.ct-list {
-		background-image: unset !important;
-	}
-
-	.hud-buy-menu {
-		left: unset;
-		padding: unset;
-		top: 30%;
-	}
-
-	.hud-buy-menu-title {
-		color: transparent !important;
-		font-family: 'Trebuchet MS';
-		font-size: 15px;
-		font-weight: bold;
-		margin-bottom: 20px;
-		text-align: left;
-	}
-
-	.hud-buy-menu-title:before {
-		color: #f8cb07 !important;
-		opacity: 75%;
-		content: "Buy Item";
-	}
-
-	.hud-buy-menu-button,
-	.hud-menu-text {
-		font-family: 'Trebuchet MS';
-		font-size: 15px;
-		font-weight: bold;
-		text-shadow: unset;
-		line-height: unset;
-	}
-
-	.hud-buy-menu-button:hover {
-		background: unset;
-	}
-
-	.hud-buy-menu-divider {
-		opacity: 0;
-		height: 20px;
-	}
-
-	/* kill feed - todo*/
-	.hud-death {
-		background: unset;
-		text-shadow: 1px 1px 0px black;
-		font-family: 'Verdana';
-		font-size: 9pt;
-		font-weight: bold;
-	}
-
-	.hud-death-weapon {
-		color: #ff2727 !important;
-		text-shadow: none !important;
-		opacity: 85%;
-	}
-
-	/* radio */
-	.hud-menu-mode-yellow {
-		line-height: 75px;
-		opacity: 75%;
-	}
-
-	.hud-menu-text {
-		top: 30%;
-		line-height: 22px;
-		left: unset;
-	}
-
-	/*spec*/
-	.hud-spec-name {
-		display: none;
-	}
-
-	.hud-spectator .hud-spec-bar {
-		display: none;
-	}
-
-
-	/* play cs top buttons */
-	.exit-button,
-	.exit-button:hover {
-		background: none;
-		left: unset;
-		right: 5px;
-		padding: 5px;
-	}
-
-	.exit-button {
-		mix-blend-mode: plus-lighter;
-		color: var(--hud-color);
-	}
-
-	.fa {
-		font-size: 25px;
-	}
-
-	#complain_button,
-	#votekick_button,
-	.fullscreen-button,
-	.reload-button {
-		display: none !important;
-	}
-
-	/* spec mode warning doesn't exist in CS 1.6 - let's get rid of that */
-	.hud-in-specmode {
-		display: none !important;
-	}
-
-	/* statusbar */
-	.hud-statusbar {
-		font-family: 'Verdana';
-		font-size: 9pt;
-		font-weight: bold;
-		text-shadow: 1px 1px 0px black;
-	}
-
-	/* cor dos tr - valeu track */
-
-	.tr-color {
-		color: #FF3F3F;
-	}
-
-	/* "c4 must be planted at a bombsite" */
-	.hud-message {
-		background: unset !important;
-		border-top: unset;
-		border-bottom: unset;
-		font-family: 'Verdana';
-		font-size: 9pt !important;
-		font-weight: bold;
-		text-shadow: 1px 1px 0px black;
-		color: #FFB41E !important;
-	}
-
-	/* trocador de time melhorzinho */
-	#chooseteam-menu>h3 {
-		color: #FFB41E !important;
-		font-family: 'Verdana';
-		font-size: 20px;
-		font-weight: bold;
-		text-align: left;
-	}
-
-	#chooseteam-menu button .menu-button-text {
-		color: #FFB41E !important;
-	}
-
-
-	/* TELA DE CARREGAMENTO - SEPARARAR EVENTUALMENTE */
-	body {
-		margin: unset;
-	}
-
-	.ya-share2__list {
-		display: none;
-	}
-
-	#pointerlock_overlay.ui_layer {
-		z-index: 0 !important;
-	}
-
-
-
-	.sr_background,
-	#loading_blocker>.loading-bg {
-		background-image: var(--loading-bg) !important;
-		-webkit-filter: unset !important;
-		-moz-filter: unset;
-		-o-filter: unset;
-		-ms-filter: unset;
-		filter: unset !important;
-	}
-
-
-	.loading-hint,
-	.loading_control_block,
-	.loading-mapfulldesc,
-	.server_ranked,
-	.server_private,
-	.loading-mapdesc {
-		display: none !important;
-	}
-
-	.loading-main,
-	#sr_round_limit {
-		width: 368px;
-		background: #4C5844;
-		border: 1px outset #889180;
-		margin: auto;
-		top: 0;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		position: fixed !important;
-		height: fit-content !important;
-		color: #A0AA95;
-	}
-
-	.loading-mapname .server_name::before {
-		content: "";
-		display: inline-block;
-		width: 16px;
-		height: 16px;
-		background-image: url('https://github.com/kfh83/crap/blob/main/Icon2.png?raw=true');
-		background-size: cover;
-		vertical-align: middle;
-	}
-
-	#loading_blocker>* {
-		border-radius: unset;
-		font-family: 'Tahoma' !important;
-		text-shadow: unset !important;
-		padding-left: 6px;
-		font-size: 10pt !important;
-		padding-bottom: 18px;
-	}
-
-	.loading-phase {
-		color: #A0AA95;
-		font-size: 10pt;
-		margin-bottom: 8px !important;
-	}
-
-	.loading-mapname {
-		color: White;
-		font-size: 10pt;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-
-	.loading-minimap,
-	.loading-desc {
-		padding: unset;
-		margin-top: 6px;
-		margin-bottom: 12px;
-		margin-left: unset;
-	}
-
-	.loading-phase,
-	.loading-progress {
-		margin: unset;
-		margin-left: 8px;
-		margin-right: unset;
-	}
-
-	/* loading-progress */
-	.loading-main .loading-progress {
-		height: 16px;
-		padding: 3px;
-		border: 1px inset #889180;
-		background: #3E4637;
-		margin-bottom: 8px;
-		width: 252px;
-	}
-
-	.loading-loaded {
-		background: #C4B550;
-	}
-
-	.loading-main>div:last-child {
-		position: relative;
-		color: transparent;
-	}
-
-	.loading-main>div:last-child:before {
-		content: "Content hosting provided by:";
-		color: #A0AA95 !important;
-		margin-left: 8px;
-		margin-right: 16px;
-		border-top: 1px solid #889180;
-		padding-top: 8px;
-		display: block;
-		box-shadow: 0px -1px 0 #282E22;
-	}
-
-
-	.loading-main>div:last-child:after {
-		/* anuncio na tela de loading */
-		content: "";
-		display: block;
-		width: 340px;
-		height: 56px;
-		background: black;
-		background-image: var(--loading-ad);
-		background-position: center;
-
-		margin-left: 8px;
-		border: 1px inset #889180;
-	}
-
-	/* loading progress - blocks */
-
-	.loading-loaded[style="width: 1%;"],
-	.loading-loaded[style="width: 2%;"],
-	.loading-loaded[style="width: 3%;"],
-	.loading-loaded[style="width: 4%;"],
-	.loading-loaded[style="width: 5%;"] {
-		width: 5% !important;
-	}
-
-	.loading-loaded[style="width: 6%;"],
-	.loading-loaded[style="width: 7%;"],
-	.loading-loaded[style="width: 8%;"],
-	.loading-loaded[style="width: 9%;"],
-	.loading-loaded[style="width: 10%;"] {
-		width: 10% !important;
-	}
-
-	.loading-loaded[style="width: 11%;"],
-	.loading-loaded[style="width: 12%;"],
-	.loading-loaded[style="width: 13%;"],
-	.loading-loaded[style="width: 14%;"],
-	.loading-loaded[style="width: 15%;"] {
-		width: 15% !important;
-	}
-
-	.loading-loaded[style="width: 16%;"],
-	.loading-loaded[style="width: 17%;"],
-	.loading-loaded[style="width: 18%;"],
-	.loading-loaded[style="width: 19%;"],
-	.loading-loaded[style="width: 20%;"] {
-		width: 20% !important;
-	}
-
-	.loading-loaded[style="width: 21%;"],
-	.loading-loaded[style="width: 22%;"],
-	.loading-loaded[style="width: 23%;"],
-	.loading-loaded[style="width: 24%;"],
-	.loading-loaded[style="width: 25%;"] {
-		width: 25% !important;
-	}
-
-	.loading-loaded[style="width: 26%;"],
-	.loading-loaded[style="width: 27%;"],
-	.loading-loaded[style="width: 28%;"],
-	.loading-loaded[style="width: 29%;"],
-	.loading-loaded[style="width: 30%;"] {
-		width: 30% !important;
-	}
-
-	.loading-loaded[style="width: 31%;"],
-	.loading-loaded[style="width: 32%;"],
-	.loading-loaded[style="width: 33%;"],
-	.loading-loaded[style="width: 34%;"],
-	.loading-loaded[style="width: 35%;"] {
-		width: 35% !important;
-	}
-
-	.loading-loaded[style="width: 36%;"],
-	.loading-loaded[style="width: 37%;"],
-	.loading-loaded[style="width: 38%;"],
-	.loading-loaded[style="width: 39%;"],
-	.loading-loaded[style="width: 40%;"] {
-		width: 40% !important;
-	}
-
-	.loading-loaded[style="width: 41%;"],
-	.loading-loaded[style="width: 42%;"],
-	.loading-loaded[style="width: 43%;"],
-	.loading-loaded[style="width: 44%;"],
-	.loading-loaded[style="width: 45%;"] {
-		width: 45% !important;
-	}
-
-	.loading-loaded[style="width: 46%;"],
-	.loading-loaded[style="width: 47%;"],
-	.loading-loaded[style="width: 48%;"],
-	.loading-loaded[style="width: 49%;"],
-	.loading-loaded[style="width: 50%;"] {
-		width: 50% !important;
-	}
-
-	.loading-loaded[style="width: 51%;"],
-	.loading-loaded[style="width: 52%;"],
-	.loading-loaded[style="width: 53%;"],
-	.loading-loaded[style="width: 54%;"],
-	.loading-loaded[style="width: 55%;"] {
-		width: 55% !important;
-	}
-
-	.loading-loaded[style="width: 56%;"],
-	.loading-loaded[style="width: 57%;"],
-	.loading-loaded[style="width: 58%;"],
-	.loading-loaded[style="width: 59%;"],
-	.loading-loaded[style="width: 60%;"] {
-		width: 60% !important;
-	}
-
-	.loading-loaded[style="width: 61%;"],
-	.loading-loaded[style="width: 62%;"],
-	.loading-loaded[style="width: 63%;"],
-	.loading-loaded[style="width: 64%;"],
-	.loading-loaded[style="width: 65%;"] {
-		width: 65% !important;
-	}
-
-	.loading-loaded[style="width: 66%;"],
-	.loading-loaded[style="width: 67%;"],
-	.loading-loaded[style="width: 68%;"],
-	.loading-loaded[style="width: 69%;"],
-	.loading-loaded[style="width: 70%;"] {
-		width: 70% !important;
-	}
-
-	.loading-loaded[style="width: 71%;"],
-	.loading-loaded[style="width: 72%;"],
-	.loading-loaded[style="width: 73%;"],
-	.loading-loaded[style="width: 74%;"],
-	.loading-loaded[style="width: 75%;"] {
-		width: 75% !important;
-	}
-
-	.loading-loaded[style="width: 76%;"],
-	.loading-loaded[style="width: 77%;"],
-	.loading-loaded[style="width: 78%;"],
-	.loading-loaded[style="width: 79%;"],
-	.loading-loaded[style="width: 80%;"] {
-		width: 80% !important;
-	}
-
-	.loading-loaded[style="width: 81%;"],
-	.loading-loaded[style="width: 82%;"],
-	.loading-loaded[style="width: 83%;"],
-	.loading-loaded[style="width: 84%;"],
-	.loading-loaded[style="width: 85%;"] {
-		width: 85% !important;
-	}
-
-	.loading-loaded[style="width: 86%;"],
-	.loading-loaded[style="width: 87%;"],
-	.loading-loaded[style="width: 88%;"],
-	.loading-loaded[style="width: 89%;"],
-	.loading-loaded[style="width: 90%;"] {
-		width: 90% !important;
-	}
-
-	.loading-loaded[style="width: 91%;"],
-	.loading-loaded[style="width: 92%;"],
-	.loading-loaded[style="width: 93%;"],
-	.loading-loaded[style="width: 94%;"],
-	.loading-loaded[style="width: 95%;"] {
-		width: 95% !important;
-	}
-
-	.loing-loaded[style="width: 96%;"],
-	.loading-loaded[style="width: 97%;"],
-	.loading-loaded[style="width: 98%;"],
-	.loading-loaded[style="width: 99%;"],
-	.loading-loaded[style="width: 100%;"] {
-		width: 100% !important;
-	}
-
-	.loading-loaded {
-		position: relative;
-	}
-
-	.loading-loaded:before {
-		/* 99% do codigo do loading é do duckbala (henri)... valeu irmao */
-		content: "";
-		width: 4px;
-		height: 100%;
-		position: absolute;
-		left: -4px;
-		top: 0;
-		box-shadow: 11px 0 0px 0px #3E4637,
-			22px 0 0px 0px #3E4637,
-			33px 0 0px 0px #3E4637,
-			44px 0 0px 0px #3E4637,
-			55px 0 0px 0px #3E4637,
-			66px 0 0px 0px #3E4637,
-			77px 0 0px 0px #3E4637,
-			88px 0 0px 0px #3E4637,
-			99px 0 0px 0px #3E4637,
-			110px 0 0px 0px #3E4637,
-			121px 0 0px 0px #3E4637,
-			132px 0 0px 0px #3E4637,
-			143px 0 0px 0px #3E4637,
-			154px 0 0px 0px #3E4637,
-			165px 0 0px 0px #3E4637,
-			176px 0 0px 0px #3E4637,
-			187px 0 0px 0px #3E4637,
-			198px 0 0px 0px #3E4637,
-			209px 0 0px 0px #3E4637,
-			220px 0 0px 0px #3E4637,
-			231px 0 0px 0px #3E4637,
-			242px 0 0px 0px #3E4637,
-			253px 0 0px 0px #3E4637;
-
-	}
-
-	.loading-progress {
-		display: inline-block;
-	}
-
-	.loading-cancel-button {
-		display: inline-block;
-		vertical-align: top;
-		padding: 3px;
-		padding-left: 5px;
-		width: 72px;
-
-		border: 1px outset #889180;
-		background: #4C5844;
-		font-family: 'Tahoma';
-		font-size: 10pt;
-
-	}
-
-	/* tela da senha */
-	#server_full,
-	#server_full2 {
-		background: #4C5844 !important;
-		border: 1px outset #889180;
-		padding-bottom: 12px !important;
-		margin: auto;
-		top: 0;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		position: fixed !important;
-		height: fit-content !important;
-		width: 276px;
-	}
-
-	p {
-		color: #A0AA95;
-	}
-
-	#server_full h2 {
-		color: #ffff;
-		font-weight: unset !important;
-		font-size: 9pt !important;
-		margin: unset !important;
-		text-align: left;
-		margin-top: 2px !important;
-
-	}
-
-	#server_full h2:before {
-		content: "";
-		display: inline-block;
-		width: 16px;
-		height: 16px;
-		background-image: url('https://github.com/kfh83/crap/blob/main/Icon2.png?raw=true');
-		background-size: cover;
-		vertical-align: middle;
-		margin-right: 5px;
-
-	}
-
-	.invite-button {
-		padding: 6px;
-		padding-right: 4px !important;
-	}
-
-	#f-code {
-		position: relative;
-		border: 1px inset #889180;
-		background: #3E4637;
-		color: #D8DED3;
-		font-family: 'Tahoma';
-		outline: none;
-		left: 32px;
-		width: 180px;
-		height: 20px;
-	}
-
-	.cell-code {
-		display: none;
-	}
-
-	.password-label {
-		color: #C4B550;
-		position: absolute;
-		left: 27px;
-		top: 91px;
-	}
-
-
-	.menu_action_btn {
-		border-radius: unset;
-		border: 1px outset #889180;
-		background: #4C5844;
-		font-family: 'Tahoma';
-		font-size: 10pt;
-		text-shadow: unset;
-		color: #D8DED3 !important;
-		width: 74px;
-		display: none;
-	}
-
-	#server_full,
-	#server_full2 {
-		color: #D8DED3 !important;
-	}
-
-	#server_full p:nth-child(5) {
-		display: none !important;
-	}
-
-	#server_full p:nth-child(2) {
-		margin: 16px !important;
-		margin-left: 12px !important;
-		text-align: left;
-	}
-
-	#server_full p:nth-child(2)::after {
-		content: 'This server requires a password to join.';
-		position: absolute;
-		left: 6px;
-		margin: 24px 0px 0px 12px;
-		color: #D8DED3;
-	}
-
-	.invite-button {
-		/* os cara são RETARDADO do mais alto calibre, porem eu tenho uma ideia !!!!! */
-		position: unset;
-		/* sim, isso não afeta a tela de server full nem a da senha mas bombardeia o botão */
-	}
-
-	/* especifico - tela de kick */
-	#sr_round_limit {
-		text-align: left;
-		padding-top: 8px;
-		padding-left: 8px;
-		width: 500px !important;
-	}
-
-	#sr_round_limit h2 {
-		font-family: 'Tahoma';
-		font-size: 9pt;
-		color: white;
-		font-weight: unset !important;
-		margin: unset;
-
-	}
-
-	#sr_round_limit h2::before {
-		content: "";
-		display: inline-block;
-		width: 16px;
-		height: 16px;
-		background-image: url('https://github.com/kfh83/crap/blob/main/Icon2.png?raw=true');
-		background-size: cover;
-		vertical-align: middle;
-		margin-right: 5px;
-	}
-
-	#sr_round_limit p {
-		font-family: 'Tahoma';
-		font-size: 9pt !important;
-		margin-left: 8px;
-	}
-
-	#sr_round_limit p span {
-		color: #A0AA95 !important;
-	}
-
-	#sr_round_limit .menu_action_btn {
-		margin: unset;
-		margin-bottom: 8px !important;
-		margin-left: 8px;
-	}
-
-	.loading-buttons {
-		display: flex;
-		flex-direction: row-reverse;
-		height: 24px;
-		margin-top: 16px;
-		margin-left: 13px;
-		margin-right: 13px;
-	}
-
-	.loading-buttons a {
-		border: 1px outset #889180;
-		background: #4C5844;
-		font-family: 'Tahoma';
-		font-size: 10pt;
-		text-align: left;
-		padding-top: 2px;
-		padding-left: 5px;
-		width: 67px;
-	}
-
-	/* this one needs to be specifically a little smaller to accomodate the box shadow while keeping the same dimensions */
-	.connect-button {
-		height: 18px;
-		width: 65px !important;
-		margin-top: 1px;
-		box-shadow: 0px 0px 0px 1px black;
-		margin-right: 8px;
-	}
-
-
-	/* win messages */
-
-	.hud-win-image-tr,
-	.hud-win-image-ct {
-		font-family: 'Verdana';
-		font-size: 9pt !important;
-		font-weight: bold;
-		text-shadow: 1px 1px 0px black;
-		color: #FFB41E !important;
-		top: 30%;
-		left: 50%;
-		width: 600px;
-		margin-left: -300px;
-		position: fixed;
-		text-align: center;
-	}
-
-	/* progress bar */
-
-	.hud-bar {
-		width: 50%;
-		height: 8px;
-		top: 60%;
-		left: 25%;
-		border-color: var(--hud-color);
-		mix-blend-mode: plus-lighter;
-		margin-left: unset;
-		margin-top: unset;
-	}
-
-	.hud-bar-progress {
-		margin: 1px;
-		height: 6px;
-		background: var(--hud-color);
-	}
-
-	/* tab ui - v2 */
-
-
-	.server_owner {
-		display: none;
-		/* tirar dono do server*/
-	}
-
-	.flag-icon {
-		display: none;
-		/* tira a bandeira do jogador/server. eu poderia ser especifico em tirar o do tab, mas eu quero que afete o loading tbm. */
-	}
-
-	.hud-scoreboard-mapname {
-		display: none;
-		/* tira o banner com o nome do server original do jogo, eu vo fazer uma gambiarra */
-	}
-
-	.scoreboard-hud-common-head th:first-child,
-	.scoreboard-hud-common-head th:nth-child(3) {
-		display: none;
-		/* tira o "perks" e "lvl" do cabeçalho da table */
-	}
-
-	.player_rank {
-		display: none;
-	}
-
-	.hud-scoreboard .scoreboard-hud-ct-body tr td:first-child,
-	.hud-scoreboard .scoreboard-hud-ct-body tr td:nth-child(3),
-	.hud-scoreboard .scoreboard-hud-tr-body tr td:first-child,
-	.hud-scoreboard .scoreboard-hud-tr-body tr td:nth-child(3) {
-		display: none;
-		/* faz a mesma coisa, mas nos proprios players da table */
-	}
-
-	#skill_total_2,
-	#skill_total_1 {
-		color: transparent !important;
-		/* deixar o total de skill transparente, não remover pq precisa da th */
-	}
-
-	.hud-scoreboard {
-		text-shadow: unset;
-		/* remover sombra dos textos */
-		overflow: hidden;
-	}
-
-	.scoreboard-hud-ct-head tr th:nth-child(2),
-	.scoreboard-hud-tr-head tr th:nth-child(2) {
-		text-align: center !important;
-		/* ajeitar posicionamento do score */
-	}
-
-	.scoreboard-hud-ct-head tr th:first-child,
-	.scoreboard-hud-tr-head tr th:first-child {
-		text-align: left !important;
-	}
-
-	.scoreboard-hud-tr-head tr th:nth-child(2),
-	.scoreboard-hud-tr-head tr th:first-child,
-	.scoreboard-hud-tr-body tr td,
-	.scoreboard-hud-tr-body tr td span {
-		color: #FF3F3F !important;
-	}
-
-	.scoreboard-hud-ct-head tr th:nth-child(2),
-	.scoreboard-hud-ct-head tr th:first-child,
-	.scoreboard-hud-ct-body tr td,
-	.scoreboard-hud-ct-body tr td span {
-		color: #81D0FF !important;
-	}
-
-
-	.scoreboard-hud-common-head tr th,
-	.hud-scoreboard,
-	.hud-scoreboard table th,
-	.hud-scoreboard table td {
-		font-family: 'Verdana';
-		font-size: 9pt !important;
-		font-weight: bold !important;
-	}
-
-	.scoreboard-hud-common-head tr th {
-		color: #FFB41E;
-
-	}
-
-	.scoreboard-hud-ct-head tr th:first-child,
-	.scoreboard-hud-tr-head tr th:first-child {
-		color: transparent !important;
-	}
-
-
-
-	.scoreboard-hud-ct-head tr th:first-child:before {
-		content: "Counter-Terrorists";
-		color: #81D0FF !important;
-	}
-
-	.scoreboard-hud-tr-head tr th:first-child:before {
-		content: "Terrorists";
-		color: #FF3F3F !important;
-	}
-
-
-
-	.hud-scoreboard table th,
-	.hud-scoreboard table td {
-		padding: unset;
-	}
-
-
-	.hud-scoreboard {
-		border-radius: 8px;
-		border: 1px solid rgba(255, 180, 0, .5);
-		background: rgba(0, 0, 0, 0.5);
-	}
-
-
-	.scoreboard-hud-ct-head th {
-		border-top: 1px solid rgba(255, 180, 0, .5);
-		/* infelizmente, a borda que separa o nome do server/ header com os times */
-		border-bottom: 1px solid #81D0FF;
-	}
-
-	.scoreboard-hud-tr-head th {
-		border-bottom: 1px solid #FF3F3F;
-	}
-
-	.scoreboard-hud-ct-body tr td[style="background-color: #4d9a46;"],
-	.scoreboard-hud-tr-body tr td[style="background-color: #4d9a46;"],
-	.scoreboard-hud-ct-body tr td[style="background-color: #547b50;"],
-	.scoreboard-hud-tr-body tr td[style="background-color: #547b50;"] {
-		background-color: rgba(255, 255, 255, 0.15) !important;
-	}
-
-	.scoreboard-hud-ct-body tr td {
-		background-color: rgba(255, 255, 255, 0.15);
-	}
-
-	.scoreboard-hud-tr-body tr td,
-	.scoreboard-hud-ct-body tr td {
-		background: none;
-	}
-
-	.scoreboard-hud-tr-body tr td[style="background-color: #505050;"],
-	.scoreboard-hud-ct-body tr td[style="background-color: #505050;"] {
-		background: none !important;
-	}
-
-	.scoreboard-hud-ct-body tr td span:before,
-	.scoreboard-hud-tr-body tr td span:before {
-		content: "";
-		display: var(--use-pfp);
-		width: 32px;
-		height: 32px;
-		margin-left: 20px;
-		margin-right: 5px;
-		background-image: url('https://github.com/kfh83/crap/blob/main/pfp.jpg?raw=true');
-		background-size: cover;
-		vertical-align: middle;
-	}
-
-	.hud-scoreboard[style="display: block;"] {
-		display: flex !important;
-		top: 15%;
-		bottom: 0;
-		height: 72.5%;
-		flex-direction: column;
-		align-items: center;
-		width: 80%;
-		left: 0;
-		right: 0;
-		margin: 0 auto;
-
-	}
-
-	.hud-scoreboard table {
-		background: none;
-		padding: 3px;
-		border-spacing: 0px;
-	}
-
-	/* orangebox banner styling */
-
-	/*
-	.tab-orangebox-banner{
-		min-height: 60px;
-		height: 96px;
-		width: 384px;
-		background: url('https://github.com/kfh83/crap/blob/main/blackbox-banner.png?raw=true');
-		background-size: 100% auto;
-		position: absolute;
-		display: flex;
-		left: 0;
-		right: 0;
-		margin: 0 auto;
-		top: 2%;
-		z-index: 13;
-	}
-	*/
-	/* continuar dps */
-	/* spec */
-	.hud-spec-bar {
-		display: none;
-	}
-
-
-
-	/* vitals indicator - HOLY SHIT ! */
-	.classic-health-indicator {
-		display: flex;
-		position: absolute;
-		z-index: 13;
-		bottom: 12px;
-		left: 12px;
-
-		mix-blend-mode: plus-lighter;
-	}
-
-	.classic-health-indicator .hud-health-icon {
-		background-position: -48px -25px;
-		width: 24px;
-		height: 24px;
-
-	}
-
-	.classic-health-indicator div {
-		height: 25px;
-		width: 19px;
-		background-image: url('https://github.com/kfh83/crap/blob/main/hud-spritesheet-orange.png?raw=true');
-		flood-color: #704700;
-	}
-
-	/* classic money indicator */
-	.classic-money-indicator {
-		display: flex;
-		position: absolute;
-		z-index: 13;
-		bottom: 50px;
-		right: 12px;
-
-		mix-blend-mode: plus-lighter;
-	}
-
-	.classic-money-indicator .hud-money-icon {
-		background-position: 64px -26px;
-		width: 18px;
-		height: 24px;
-		margin-right: 8px;
-
-	}
-
-	.classic-money-indicator div {
-		height: 25px;
-		width: 19px;
-		background-image: url('https://github.com/kfh83/crap/blob/main/hud-spritesheet-orange.png?raw=true');
-		flood-color: #704700;
-	}
-
-	.hud-money-fadecolor-minus {
-		animation: hud-money-fadecolor-minus 5s linear forwards;
-	}
-
-	@keyframes hud-money-fadecolor-minus {
-		from {
-			filter: hue-rotate(-50deg) saturate(2);
-		}
-
-		to {
-			filter: hue-rotate(0deg) saturate
-		}
-	}
-
-	.hud-money-fadecolor-plus {
-		animation: hud-money-fadecolor-plus 5s linear forwards;
-	}
-
-	@keyframes hud-money-fadecolor-plus {
-		from {
-			filter: hue-rotate(60deg) saturate(2);
-		}
-
-		to {
-			filter: hue-rotate(0deg) saturate
-		}
-	}
-
-
-	/* classic armor indicator */
-	.classic-armor-indicator {
-		display: flex;
-		position: absolute;
-		z-index: 13;
-		bottom: 12px;
-		left: 20%;
-
-		mix-blend-mode: plus-lighter;
-	}
-
-	.classic-armor-indicator .hud-armor-icon {
-		background-position: -24px -25px;
-		width: 24px;
-		height: 24px;
-		margin-right: 8px;
-
-	}
-
-	.classic-armor-indicator div {
-		height: 25px;
-		width: 19px;
-		background-image: url('https://github.com/kfh83/crap/blob/main/hud-spritesheet-orange.png?raw=true');
-		flood-color: #704700;
-	}
-
-	/* classic time indicator */
-	.classic-time-indicator {
-		display: flex;
-		position: absolute;
-		z-index: 13;
-		bottom: 12px;
-		left: 45%;
-
-		mix-blend-mode: plus-lighter;
-
-		text-align: center;
-	}
-
-	.classic-time-indicator .hud-time-icon {
-		background-position: 108px -72px;
-		width: 18px;
-		height: 24px;
-
-	}
-
-	.classic-time-indicator div {
-		height: 25px;
-		width: 19px;
-		background-image: url('https://github.com/kfh83/crap/blob/main/hud-spritesheet-orange.png?raw=true');
-		flood-color: #704700;
-	}
-
-	.hud-time-separator {
-		background-image: none !important;
-		width: 3px !important;
-	}
-
-	.hud-time-separator div {
-		background-image: none;
-	}
-
-	.hud-time-separator-tick1,
-	.hud-time-separator-tick2 {
-		height: 2px !important;
-		width: 2px !important;
-		background-color: #704700;
-	}
-
-	.hud-time-separator-tick1 {
-		position: absolute;
-		top: 8px;
-	}
-
-	.hud-time-separator-tick2 {
-		position: absolute;
-		bottom: 8px;
-	}
-
-	/* classic ammo indicator */
-
-	.classic-ammo-indicator {
-		position: absolute;
-		z-index: 13;
-		bottom: 12px;
-		right: 12px;
-
-		mix-blend-mode: plus-lighter;
-	}
-
-	.classic-ammo-indicator .hud-ammo-icon {
-		background-position: 0px -72px;
-		width: 24px;
-		height: 24px;
-
-	}
-
-	.classic-ammo-indicator div {
-		height: 25px;
-		width: 19px;
-		background-image: url('https://github.com/kfh83/crap/blob/main/hud-spritesheet-orange.png?raw=true');
-	}
-
-	.hud-ammo-separator {
-		background-image: none !important;
-		width: 2px !important;
-		margin-left: 8px;
-		margin-right: 8px;
-		background-color: #704700;
-	}
-
-	/* attempt to fix the defuser/buyzone/c4 icons */
-
-
-	.hud-defuser-icon,
-	.hud-buyzone-icon,
-	.hud-c4-icon {
-		background-image: url('https://github.com/kfh83/crap/blob/main/hud-spritesheet-orange.png?raw=true');
-		color: transparent !important;
-		width: 32px !important;
-		height: 32px !important;
-		left: 10px;
-		filter: hue-rotate(60deg) saturate(2);
-	}
-
-	.hud-buyzone-icon {
-		background-position: -96px -148px;
-	}
-
-	.hud-defuser-icon {
-		background-position: -32px -148px;
-		padding-left: unset;
-	}
-
-	.hud-c4-icon {
-		background-position: -0px -148px;
-	}
-
-	/* remove */
-	.hud-bomb-planted {
-		display: none !important;
-	}
-
-	/* animate ammo activity */
-	.hud-number-activity {
-		animation: hud-number-activity 3s linear forwards;
-	}
-
-	@keyframes hud-number-activity {
-		from {
-			filter: brightness(2);
-		}
-
-		to {
-			filter: brightness(1);
-		}
-	}
-
-	/* spec */
-
-	.hud-spec-top-bar {
-		position: absolute;
-		top: 0;
-		width: 100%;
-		height: 13.65%;
-		z-index: 13;
-		background: rgba(0, 0, 0, 0.77);
-	}
-
-	.hud-spec-orangebox-banner {
-		display: flex;
-		position: absolute;
-		height: 100%;
-		width: fit-content;
-		left: 5px;
-	}
-
-	.hud-spec-banner-image {
-		padding: 5px 0px 5px 0px;
-	}
-
-
-	.hud-spec-details {
-		height: 48px;
-		display: flex;
-		position: absolute;
-		right: 20px;
-		top: 0;
-		bottom: 0;
-		margin-top: auto;
-		margin-bottom: auto;
-		color: #FFB000;
-		font-family: 'Verdana';
-		font-size: 9pt;
-		font-weight: bold;
-
-	}
-
-	.hud-spec-separator {
-		width: 1px !important;
-		margin-left: 18px;
-		margin-right: 18px;
-		background-color: #704700;
-	}
-
-	.hud-spec-left-side {
-		text-align: right;
-	}
-
-	.hud-spec-right-side {
-		text-align: left;
-	}
-
-	.hud-spec-left-side,
-	.hud-spec-right-side {
-		margin-top: 8px;
-	}
-
-	.hud-spec-t-win,
-	.hud-spec-time-host {
-		margin-top: 2px;
-	}
-
-	.hud-spec-time-icon {
-		height: 16px;
-		width: 16px;
-		background: url('https://github.com/kfh83/crap/blob/main/timer.png?raw=true');
-	}
-
-	.hud-spec-time-host {
-		display: flex;
-	}
-
-	.hud-spec-time {
-		margin-left: 4px;
-	}
-
-	.hud-spec-bottom-bar {
-		position: absolute;
-		bottom: 0;
-		width: 100%;
-		height: 13.65%;
-		z-index: 13;
-		background: rgba(0, 0, 0, 0.77);
-	}
-
-	.hud-spec-nickname {
-		position: absolute;
-		top: 0;
-		bottom: 0;
-		right: 0;
-		left: 0;
-		font-family: 'Verdana';
-		font-size: 9pt;
-		font-weight: bold;
-		text-align: center;
-		align-self: center;
-	}
-
-	/* scope */
-
-	.hud-zoom-overlay-redpoint {
-		background: url('https://github.com/kfh83/crap/blob/main/scope.png?raw=true');
-		border-radius: unset;
-		height: 256px;
-		width: 256px;
-		margin: auto;
-		top: 0;
-		bottom: 0;
-		left: 0;
-		right: 0;
-	}
-
-	.hud-zoom-overlay-vert {
-		margin-left: auto;
-		margin-right: auto;
-		top: 0;
-		bottom: 0;
-		left: 0;
-		right: 1px;
-	}
-
-	.hud-zoom-overlay-horiz {
-		margin-top: auto;
-		margin-bottom: auto;
-		top: 2px;
-		bottom: 0px;
-		left: 0;
-		right: 0px;
-	}
-
-	.hud-zoom-overlay-circle {
-		border-radius: 100vh;
-		margin: auto;
-		top: 0;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		position: fixed;
-		width: 85vh;
-		/* absolutamente retardado */
-		height: 85vh;
-		box-shadow: 0 0 0 9999px rgba(0, 0, 0, 1);
-	}
-
-	/* new money plus and minus */
-
-	.money-diff {
-		display: flex;
-		flex-direction: column-reverse;
-		flex-wrap: wrap-reverse;
-
-		position: absolute;
-
-		width: 114px;
-		/* fixo */
-		height: 100%;
-
-		right: 12px;
-		bottom: 80px;
-
-		z-index: 12;
-
-		mix-blend-mode: plus-lighter;
-
-	}
-
-	.money_plus div,
-	.money_minus div {
-		background-image: url('https://github.com/kfh83/crap/blob/main/hud-spritesheet-orange.png?raw=true');
-		height: 25px;
-		width: 19px;
-	}
-
-	.money_plus,
-	.money_minus {
-		display: flex !important;
-		left: unset !important;
-		right: 0 !important;
-		position: relative !important;
-	}
-
-	.money_plus {
-		filter: hue-rotate(60deg) saturate(2);
-	}
-
-	.money_minus {
-		filter: hue-rotate(-50deg) saturate(2);
-		margin-left: 5px;
-	}
-
-	.hud-money-plus-icon {
-		width: 18px !important;
-		height: 23px !important;
-		background-position: 34px -25px;
-	}
-
-	.hud-money-minus-icon {
-		width: 15px !important;
-		height: 23px !important;
-		background-position: 48px -25px;
-	}
-
-	.hud-fadeout {
-		animation: hud-fadeout 5s linear forwards;
-	}
-
-	@keyframes hud-fadeout {
-		from {
-			opacity: 1;
-		}
-
-		to {
-			opacity: 0;
-		}
-	}
-
-
-	/* net graph */
-	.hud-net-graph {
-		z-index: 50;
-		position: absolute;
-		font-family: 'Verdana';
-		font-size: 8pt;
-		font-weight: bold;
-		color: white;
-		text-shadow: 1px 1px 0px black;
-		flex-wrap: wrap;
-		width: 128px;
-		height: fit-content;
-		bottom: 4.25%;
-		left: 0;
-		right: 0;
-	}
-
-	.hud-net-graph-fps {
-		margin-right: 18px;
-	}
-
-	/* amx mod menu */
-	#amxmodmenu {
-		right: 50px;
-		padding: 5px;
-		margin-left: 10px !important;
-		color: var(--hud-color);
-		display: none;
-	}
-
-	#amxmodmenu i {
-		margin-right: unset;
-	}
+/* SteamLike HUD - By: KfH--, Henri (hen.fs), TRACK */
+/* Last updated: 30/12/2024 */
+/* TODO: MAJOR cleanup, commenting */
+:root {
+    --hud-color: #704700;
+    /* Cor dos elementos do hud (numero do health, armor...) - PADRÃO: #704700 */
+    --chat-color: #FFB41E;
+    /* Cor das mensagens do chat - PADRÃO: #FFB41E */
+    --loading-bg: url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/background.png?raw=true');
+    /* fundo da tela de carregamento */
+    --loading-ad: url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/valvecontent.png?raw=true');
+    /* anuncio da tela de carregamento */
+    --use-pfp: none;
+    /* Habilitar fotos de perfil fake do lado do usuário. none = desabilitado, inline-block: habilitado */
+
+}
+
+.pointerlock_overlay {
+    /* melhor pra trabalhar, não serve nenhuma utilidade */
+    z-index: 0 !important;
+
+}
+
+.ui_layer {
+    color: transparent !important;
+
+}
+
+.hud-guest-banner {
+    display: none;
+
+}
+
+.hud-grad-left {
+    background: unset;
+
+}
+
+.hud-grad-right {
+    background: unset;
+    border-top: unset;
+    color: var(--hud-color);
+    mix-blend-mode: plus-lighter;
+    font-weight: bold;
+}
+
+.hud-ammo-rest hud-value {
+    margin-left: 10px;
+}
+
+.hud-weapons {
+    display: none;
+}
+
+.server_skill {
+    display: none !important;
+}
+
+
+.hud-money {
+    color: var(--hud-color);
+    mix-blend-mode: plus-lighter;
+    top: unset;
+    bottom: 50px;
+    left: unset;
+    right: 15px;
+    text-align: right;
+    height: auto;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.hud-money .hud-value {
+    display: none;
+}
+
+.hud-money .fa-usd {
+    display: none;
+}
+
+
+.hud-money .money_minus,
+.money_plus {
+    order: 1;
+}
+
+.hud-ammo {
+    text-align: right;
+    right: 15px;
+    bottom: 5px;
+    display: none;
+}
+
+.hud-value {
+    font-weight: bold;
+}
+
+.hud-value::before {
+    font-size: 30px;
+    padding-bottom: 3px;
+    right: 110px;
+    position: fixed;
+}
+
+.hud-ammo span {
+    bottom: unset;
+}
+
+.hud-ammo-rest {
+    margin-left: 15px;
+}
+
+.hud-health-armor {
+    display: none;
+}
+
+.hud-health-armor .hud-icon {
+    color: var(--hud-color);
+    margin-left: 5px;
+}
+
+.hud-timer-val,
+.hud-health .hud-val {
+    margin-top: 3px;
+    color: var(--hud-color);
+    font-weight: bold;
+}
+
+.hud-armor .hud-val {
+    color: var(--hud-color) !important;
+    font-weight: bold;
+    margin-top: 3px;
+}
+
+.hud-credits {
+    display: none;
+}
+
+.hud-buyzone-icon {
+    position: fixed;
+    left: 5px;
+    top: 45%;
+}
+
+.hud-defuser-icon,
+.hud-c4-icon {
+    mix-blend-mode: plus-lighter;
+}
+
+.hud-defuse-kit {
+    top: 40%
+}
+
+.hud-bomb {
+    top: 35%
+}
+
+.hud-radar-circle {
+    background: url("https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/radar.png?raw=true") no-repeat center;
+    border: unset;
+    width: 127px;
+    height: 127px;
+    border-radius: 0px;
+}
+
+.hud-radar {
+    top: 0px;
+    left: 0px;
+    position: fixed;
+    z-index: 12;
+}
+
+.hud-radar-vert {
+    display: none;
+}
+
+.hud-radar-horiz {
+    display: none;
+}
+
+.hud-team-score {
+    position: fixed;
+    left: 50%;
+    top: unset;
+    bottom: 10px;
+    z-index: 12;
+
+    width: 200px;
+    margin-left: -100px;
+    text-align: center;
+    text-shadow: 1px 1px 2px rgba(0,
+            0,
+            0,
+            1);
+    mix-blend-mode: plus-lighter;
+    background: unset;
+
+}
+
+.hud-timer-val {
+    color: var(--hud-color);
+    font-size: 38px;
+    display: none;
+}
+
+.hud-live-block {
+    display: none;
+}
+
+.hud-ads {
+    display: none;
+}
+
+
+/* server message */
+.hud-server-message {
+    background: unset !important;
+    border-top: unset;
+    border-bottom: unset;
+    text-shadow: 1px 1px 0px black;
+    color: #FFB41E !important;
+}
+
+
+/* chat */
+.hud-chat-messages {
+    text-shadow: 1px 1px 0px black;
+    top: 70%;
+    padding: 35px 8px;
+}
+
+.hud-chat-messages {
+    color: var(--chat-color) !important;
+}
+
+.hud-chat-message-old {
+    display: none !important;
+}
+
+.hud-message-input {
+    color: var(--chat-color) !important;
+    text-shadow: 1px 1px 0px black;
+    top: 0;
+    padding: unset;
+    padding-left: 8px;
+    z-index: 24;
+}
+
+.hud-message-input input,
+.hud-message-input label {
+    color: var(--chat-color) !important;
+    text-shadow: 1px 1px 0px black;
+    caret-color: transparent;
+    font-size: unset;
+    font-family: unset;
+    font-weight: unset;
+    z-index: 25;
+}
+
+.hud-downloading {
+    font-size: unset;
+}
+
+.hud-message-input input:focus {
+    box-shadow: unset;
+}
+
+/* buy menu */
+.hud-buy-menu,
+.hud-menu-text,
+.hud-buy-menu-title {
+    background: unset !important;
+    text-align: left;
+    text-shadow: unset;
+}
+
+.t-list,
+.ct-list {
+    background-image: unset !important;
+}
+
+.hud-buy-menu {
+    left: unset;
+    padding: unset;
+    padding-left: 8px;
+    top: 12%;
+    bottom: 0;
+    margin: auto;
+    height: fit-content;
+}
+
+
+.hud-buy-menu-title {
+    color: transparent !important;
+    font-family: 'Trebuchet MS';
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.hud-buy-menu-title:before {
+    color: #f8cb07 !important;
+    opacity: 75%;
+    content: "Buy Item";
+}
+
+.hud-buy-menu-button,
+.hud-menu-text {
+    font-family: 'Trebuchet MS';
+    font-size: 15px;
+    font-weight: bold;
+    text-shadow: unset;
+    line-height: unset;
+}
+
+.hud-buy-menu-button:hover {
+    background: unset;
+
+}
+
+.hud-buy-menu-divider {
+    opacity: 0;
+    height: 20px;
+}
+
+/* kill feed - tenho q fazer*/
+.hud-death {
+    background: unset;
+    text-shadow: 1px 1px 0px black;
+    font-family: unset;
+    font-size: unset;
+    font-weight: unset;
+}
+
+.hud-death-weapon {
+    color: #ff2727 !important;
+    text-shadow: none !important;
+    opacity: 85%;
+}
+
+/* radio */
+.hud-menu-mode-yellow {
+    line-height: 75px;
+    opacity: 75%;
+}
+
+.hud-menu-text {
+    line-height: 22px;
+    left: unset;
+    position: absolute;
+    padding: unset;
+    padding-left: 14px;
+    height: fit-content;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+/*spec*/
+.hud-spec-name {
+    display: none;
+}
+
+.hud-spectator .hud-spec-bar {
+    display: none;
+}
+
+
+/* play cs top buttons */
+.exit-button,
+.exit-button:hover {
+    background: none;
+    left: unset;
+    right: 5px;
+    padding: 5px;
+}
+
+.exit-button {
+    mix-blend-mode: plus-lighter;
+    color: var(--hud-color);
+}
+
+.fa {
+    font-size: 25px;
+}
+
+#complain_button,
+#votekick_button,
+.fullscreen-button,
+.reload-button {
+    display: none !important;
+}
+
+/* spec mode warning doesn't exist in CS 1.6 - let's get rid of that */
+.hud-in-specmode {
+    display: none !important;
+}
+
+/* statusbar */
+.hud-statusbar {
+    text-shadow: 1px 1px 0px black;
+}
+
+/* cor dos tr - valeu track */
+.tr-color {
+    color: #FF3F3F;
+}
+
+/* "c4 must be planted at a bombsite" */
+.hud-message {
+    background: unset !important;
+    border-top: unset;
+    border-bottom: unset;
+    font-family: 'Verdana';
+    font-size: 9pt !important;
+    font-weight: bold;
+    text-shadow: 1px 1px 0px black;
+    color: #FFB41E !important;
+}
+
+/* trocador de time melhorzinho */
+#chooseteam-menu>h3 {
+    color: #FFB41E !important;
+    font-family: 'Verdana';
+    font-size: 20px;
+    font-weight: bold;
+    text-align: left;
+}
+
+#chooseteam-menu button .menu-button-text {
+    color: #FFB41E !important;
+}
+
+
+/* TELA DE CARREGAMENTO - SEPARARAR EVENTUALMENTE */
+body {
+    margin: unset;
+}
+
+.ya-share2__list {
+    display: none;
+}
+
+#pointerlock_overlay.ui_layer {
+    z-index: 0 !important;
+}
+
+.sr_background,
+#loading_blocker>.loading-bg {
+    background-image: var(--loading-bg) !important;
+    -webkit-filter: unset !important;
+    -moz-filter: unset;
+    -o-filter: unset;
+    -ms-filter: unset;
+    filter: unset !important;
+}
+
+
+.loading-hint,
+.loading_control_block,
+.loading-mapfulldesc,
+.server_ranked,
+.server_private,
+.loading-mapdesc {
+    display: none !important;
+}
+
+.loading-main,
+#sr_round_limit {
+    width: 368px;
+    background: #4C5844;
+    border: 1px outset #889180;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: fixed !important;
+    height: fit-content !important;
+    color: #A0AA95;
+}
+
+.loading-mapname .server_name::before {
+    content: "";
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/steam-icon.png?raw=true');
+    background-size: cover;
+    vertical-align: middle;
+}
+
+#loading_blocker>* {
+    border-radius: unset;
+    font-family: 'Tahoma' !important;
+    text-shadow: unset !important;
+    padding-left: 6px;
+    font-size: 10pt !important;
+    padding-bottom: 18px;
+}
+
+.loading-phase {
+    color: #A0AA95;
+    font-size: 10pt;
+    margin-bottom: 8px !important;
+}
+
+.loading-mapname {
+    color: White;
+    font-size: 10pt;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.loading-minimap,
+.loading-desc {
+    padding: unset;
+    margin-top: 6px;
+    margin-bottom: 12px;
+    margin-left: unset;
+}
+
+.loading-phase,
+.loading-progress {
+    margin: unset;
+    margin-left: 8px;
+    margin-right: unset;
+}
+
+/* loading-progress */
+.loading-main .loading-progress {
+    height: 16px;
+    padding: 3px;
+    border: 1px inset #889180;
+    background: #3E4637;
+    margin-bottom: 8px;
+    width: 252px;
+}
+
+.loading-loaded {
+    background: #C4B550;
+}
+
+.loading-main>div:last-child {
+    position: relative;
+    color: transparent;
+}
+
+.loading-main>div:last-child:before {
+    content: "Content hosting provided by:";
+    color: #A0AA95 !important;
+    margin-left: 8px;
+    margin-right: 16px;
+    border-top: 1px solid #889180;
+    padding-top: 8px;
+    display: block;
+    box-shadow: 0px -1px 0 #282E22;
+}
+
+
+.loading-main>div:last-child:after {
+    /* anuncio na tela de loading */
+    content: "";
+    display: block;
+    width: 340px;
+    height: 56px;
+    background: black;
+    background-image: var(--loading-ad);
+    background-position: center;
+
+    margin-left: 8px;
+    border: 1px inset #889180;
+}
+
+/* loading progress - blocks */
+.loading-loaded[style="width: 1%;"],
+.loading-loaded[style="width: 2%;"],
+.loading-loaded[style="width: 3%;"],
+.loading-loaded[style="width: 4%;"],
+.loading-loaded[style="width: 5%;"] {
+    width: 5% !important;
+}
+
+.loading-loaded[style="width: 6%;"],
+.loading-loaded[style="width: 7%;"],
+.loading-loaded[style="width: 8%;"],
+.loading-loaded[style="width: 9%;"],
+.loading-loaded[style="width: 10%;"] {
+    width: 10% !important;
+}
+
+.loading-loaded[style="width: 11%;"],
+.loading-loaded[style="width: 12%;"],
+.loading-loaded[style="width: 13%;"],
+.loading-loaded[style="width: 14%;"],
+.loading-loaded[style="width: 15%;"] {
+    width: 15% !important;
+}
+
+.loading-loaded[style="width: 16%;"],
+.loading-loaded[style="width: 17%;"],
+.loading-loaded[style="width: 18%;"],
+.loading-loaded[style="width: 19%;"],
+.loading-loaded[style="width: 20%;"] {
+    width: 20% !important;
+}
+
+.loading-loaded[style="width: 21%;"],
+.loading-loaded[style="width: 22%;"],
+.loading-loaded[style="width: 23%;"],
+.loading-loaded[style="width: 24%;"],
+.loading-loaded[style="width: 25%;"] {
+    width: 25% !important;
+}
+
+.loading-loaded[style="width: 26%;"],
+.loading-loaded[style="width: 27%;"],
+.loading-loaded[style="width: 28%;"],
+.loading-loaded[style="width: 29%;"],
+.loading-loaded[style="width: 30%;"] {
+    width: 30% !important;
+}
+
+.loading-loaded[style="width: 31%;"],
+.loading-loaded[style="width: 32%;"],
+.loading-loaded[style="width: 33%;"],
+.loading-loaded[style="width: 34%;"],
+.loading-loaded[style="width: 35%;"] {
+    width: 35% !important;
+}
+
+.loading-loaded[style="width: 36%;"],
+.loading-loaded[style="width: 37%;"],
+.loading-loaded[style="width: 38%;"],
+.loading-loaded[style="width: 39%;"],
+.loading-loaded[style="width: 40%;"] {
+    width: 40% !important;
+}
+
+.loading-loaded[style="width: 41%;"],
+.loading-loaded[style="width: 42%;"],
+.loading-loaded[style="width: 43%;"],
+.loading-loaded[style="width: 44%;"],
+.loading-loaded[style="width: 45%;"] {
+    width: 45% !important;
+}
+
+.loading-loaded[style="width: 46%;"],
+.loading-loaded[style="width: 47%;"],
+.loading-loaded[style="width: 48%;"],
+.loading-loaded[style="width: 49%;"],
+.loading-loaded[style="width: 50%;"] {
+    width: 50% !important;
+}
+
+.loading-loaded[style="width: 51%;"],
+.loading-loaded[style="width: 52%;"],
+.loading-loaded[style="width: 53%;"],
+.loading-loaded[style="width: 54%;"],
+.loading-loaded[style="width: 55%;"] {
+    width: 55% !important;
+}
+
+.loading-loaded[style="width: 56%;"],
+.loading-loaded[style="width: 57%;"],
+.loading-loaded[style="width: 58%;"],
+.loading-loaded[style="width: 59%;"],
+.loading-loaded[style="width: 60%;"] {
+    width: 60% !important;
+}
+
+.loading-loaded[style="width: 61%;"],
+.loading-loaded[style="width: 62%;"],
+.loading-loaded[style="width: 63%;"],
+.loading-loaded[style="width: 64%;"],
+.loading-loaded[style="width: 65%;"] {
+    width: 65% !important;
+}
+
+.loading-loaded[style="width: 66%;"],
+.loading-loaded[style="width: 67%;"],
+.loading-loaded[style="width: 68%;"],
+.loading-loaded[style="width: 69%;"],
+.loading-loaded[style="width: 70%;"] {
+    width: 70% !important;
+}
+
+.loading-loaded[style="width: 71%;"],
+.loading-loaded[style="width: 72%;"],
+.loading-loaded[style="width: 73%;"],
+.loading-loaded[style="width: 74%;"],
+.loading-loaded[style="width: 75%;"] {
+    width: 75% !important;
+}
+
+.loading-loaded[style="width: 76%;"],
+.loading-loaded[style="width: 77%;"],
+.loading-loaded[style="width: 78%;"],
+.loading-loaded[style="width: 79%;"],
+.loading-loaded[style="width: 80%;"] {
+    width: 80% !important;
+}
+
+.loading-loaded[style="width: 81%;"],
+.loading-loaded[style="width: 82%;"],
+.loading-loaded[style="width: 83%;"],
+.loading-loaded[style="width: 84%;"],
+.loading-loaded[style="width: 85%;"] {
+    width: 85% !important;
+}
+
+.loading-loaded[style="width: 86%;"],
+.loading-loaded[style="width: 87%;"],
+.loading-loaded[style="width: 88%;"],
+.loading-loaded[style="width: 89%;"],
+.loading-loaded[style="width: 90%;"] {
+    width: 90% !important;
+}
+
+.loading-loaded[style="width: 91%;"],
+.loading-loaded[style="width: 92%;"],
+.loading-loaded[style="width: 93%;"],
+.loading-loaded[style="width: 94%;"],
+.loading-loaded[style="width: 95%;"] {
+    width: 95% !important;
+}
+
+.loing-loaded[style="width: 96%;"],
+.loading-loaded[style="width: 97%;"],
+.loading-loaded[style="width: 98%;"],
+.loading-loaded[style="width: 99%;"],
+.loading-loaded[style="width: 100%;"] {
+    width: 100% !important;
+}
+
+.loading-loaded {
+    position: relative;
+}
+
+.loading-loaded:before {
+    /* 99% do codigo do loading é do duckbala (henri)... valeu irmao */
+    content: "";
+    width: 4px;
+    height: 100%;
+    position: absolute;
+    left: -4px;
+    top: 0;
+    box-shadow: 11px 0 0px 0px #3E4637,
+        22px 0 0px 0px #3E4637,
+        33px 0 0px 0px #3E4637,
+        44px 0 0px 0px #3E4637,
+        55px 0 0px 0px #3E4637,
+        66px 0 0px 0px #3E4637,
+        77px 0 0px 0px #3E4637,
+        88px 0 0px 0px #3E4637,
+        99px 0 0px 0px #3E4637,
+        110px 0 0px 0px #3E4637,
+        121px 0 0px 0px #3E4637,
+        132px 0 0px 0px #3E4637,
+        143px 0 0px 0px #3E4637,
+        154px 0 0px 0px #3E4637,
+        165px 0 0px 0px #3E4637,
+        176px 0 0px 0px #3E4637,
+        187px 0 0px 0px #3E4637,
+        198px 0 0px 0px #3E4637,
+        209px 0 0px 0px #3E4637,
+        220px 0 0px 0px #3E4637,
+        231px 0 0px 0px #3E4637,
+        242px 0 0px 0px #3E4637,
+        253px 0 0px 0px #3E4637;
+}
+
+.loading-progress {
+    display: inline-block;
+}
+
+.loading-cancel-button {
+    display: inline-block;
+    vertical-align: top;
+    padding: 3px;
+    padding-left: 5px;
+    width: 72px;
+
+    border: 1px outset #889180;
+    background: #4C5844;
+    font-family: 'Tahoma';
+    font-size: 10pt;
+}
+
+/* tela da senha */
+#server_full,
+#server_full2 {
+    background: #4C5844 !important;
+    border: 1px outset #889180;
+    padding-bottom: 12px !important;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: fixed !important;
+    height: fit-content !important;
+    width: 276px;
+}
+
+p {
+    color: #A0AA95;
+}
+
+#server_full h2 {
+    color: #ffff;
+    font-weight: unset !important;
+    font-size: 9pt !important;
+    margin: unset !important;
+    text-align: left;
+    margin-top: 2px !important;
+}
+
+#server_full h2:before {
+    content: "";
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/steam-icon.png?raw=true');
+    background-size: cover;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.invite-button {
+    padding: 6px;
+    padding-right: 4px !important;
+}
+
+#f-code {
+    position: relative;
+    border: 1px inset #889180;
+    background: #3E4637;
+    color: #D8DED3;
+    font-family: 'Tahoma';
+    outline: none;
+    left: 32px;
+    width: 180px;
+    height: 20px;
+}
+
+.cell-code {
+    display: none;
+}
+
+.password-label {
+    color: #C4B550;
+    position: absolute;
+    left: 27px;
+    top: 91px;
+}
+
+
+.menu_action_btn {
+    border-radius: unset;
+    border: 1px outset #889180;
+    background: #4C5844;
+    font-family: 'Tahoma';
+    font-size: 10pt;
+    text-shadow: unset;
+    color: #D8DED3 !important;
+    width: 74px;
+    display: none;
+}
+
+#server_full,
+#server_full2 {
+    color: #D8DED3 !important;
+}
+
+#server_full p:nth-child(5) {
+    display: none !important;
+}
+
+#server_full p:nth-child(2) {
+    margin: 16px !important;
+    margin-left: 12px !important;
+    text-align: left;
+}
+
+#server_full p:nth-child(2)::after {
+    content: 'This server requires a password to join.';
+    position: absolute;
+    left: 6px;
+    margin: 24px 0px 0px 12px;
+    color: #D8DED3;
+}
+
+.invite-button {
+    /* os cara são RETARDADO do mais alto calibre, porem eu tenho uma ideia !!!!! */
+    position: unset;
+    /* sim, isso não afeta a tela de server full nem a da senha mas bombardeia o botão */
+}
+
+/* especifico - tela de kick */
+#sr_round_limit {
+    text-align: left;
+    padding-top: 8px;
+    padding-left: 8px;
+    width: 500px !important;
+}
+
+#sr_round_limit h2 {
+    font-family: 'Tahoma';
+    font-size: 9pt;
+    color: white;
+    font-weight: unset !important;
+    margin: unset;
+}
+
+#sr_round_limit h2::before {
+    content: "";
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/steam-icon.png?raw=true');
+    background-size: cover;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+#sr_round_limit p {
+    font-family: 'Tahoma';
+    font-size: 9pt !important;
+    margin-left: 8px;
+}
+
+#sr_round_limit p span {
+    color: #A0AA95 !important;
+}
+
+#sr_round_limit .menu_action_btn {
+    margin: unset;
+    margin-bottom: 8px !important;
+    margin-left: 8px;
+}
+
+.loading-buttons {
+    display: flex;
+    flex-direction: row-reverse;
+    height: 24px;
+    margin-top: 16px;
+    margin-left: 13px;
+    margin-right: 13px;
+}
+
+.loading-buttons a {
+    border: 1px outset #889180;
+    background: #4C5844;
+    font-family: 'Tahoma';
+    font-size: 10pt;
+    text-align: left;
+    padding-top: 2px;
+    padding-left: 5px;
+    width: 67px;
+}
+
+/* this one needs to be specifically a little smaller to accomodate the box shadow while keeping the same dimensions */
+.connect-button {
+    height: 18px;
+    width: 65px !important;
+    margin-top: 1px;
+    box-shadow: 0px 0px 0px 1px black;
+    margin-right: 8px;
+}
+
+
+/* win messages */
+.hud-win-image-tr,
+.hud-win-image-ct {
+    text-shadow: 1px 1px 0px black;
+    color: #FFB41E !important;
+    top: 30%;
+    left: 50%;
+    width: 600px;
+    margin-left: -300px;
+    position: fixed;
+    text-align: center;
+}
+
+/* progress bar */
+.hud-bar {
+    width: 50%;
+    height: 8px;
+    top: 60%;
+    left: 25%;
+    border-color: var(--hud-color);
+    mix-blend-mode: plus-lighter;
+    margin-left: unset;
+    margin-top: unset;
+}
+
+.hud-bar-progress {
+    margin: 1px;
+    height: 6px;
+    background: var(--hud-color);
+}
+
+/* tab ui - v2 */
+.server_owner {
+    display: none;
+    /* tirar dono do server*/
+}
+
+.flag-icon {
+    display: none;
+    /* tira a bandeira do jogador/server. eu poderia ser especifico em tirar o do tab, mas eu quero que afete o loading tbm. */
+}
+
+.hud-scoreboard-mapname {
+    display: none;
+    /* tira o banner com o nome do server original do jogo, eu vo fazer uma gambiarra */
+}
+
+.scoreboard-hud-common-head th:first-child,
+.scoreboard-hud-common-head th:nth-child(3) {
+    display: none;
+    /* tira o "perks" e "lvl" do cabeçalho da table */
+}
+
+.player_rank {
+    display: none;
+}
+
+.hud-scoreboard .scoreboard-hud-ct-body tr td:first-child,
+.hud-scoreboard .scoreboard-hud-ct-body tr td:nth-child(3),
+.hud-scoreboard .scoreboard-hud-tr-body tr td:first-child,
+.hud-scoreboard .scoreboard-hud-tr-body tr td:nth-child(3) {
+    display: none;
+    /* faz a mesma coisa, mas nos proprios players da table */
+}
+
+#skill_total_2,
+#skill_total_1 {
+    color: transparent !important;
+    /* deixar o total de skill transparente, não remover pq precisa da th */
+}
+
+.hud-scoreboard {
+    text-shadow: unset;
+    /* remover sombra dos textos */
+    overflow: hidden;
+}
+
+.scoreboard-hud-ct-head tr th:nth-child(2),
+.scoreboard-hud-tr-head tr th:nth-child(2) {
+    text-align: center !important;
+    /* ajeitar posicionamento do score */
+}
+
+.scoreboard-hud-ct-head tr th:first-child,
+.scoreboard-hud-tr-head tr th:first-child {
+    text-align: left !important;
+}
+
+.scoreboard-hud-tr-head tr th:nth-child(2),
+.scoreboard-hud-tr-head tr th:first-child,
+.scoreboard-hud-tr-body tr td,
+.scoreboard-hud-tr-body tr td span {
+    color: #FF3F3F !important;
+}
+
+.scoreboard-hud-ct-head tr th:nth-child(2),
+.scoreboard-hud-ct-head tr th:first-child,
+.scoreboard-hud-ct-body tr td,
+.scoreboard-hud-ct-body tr td span {
+    color: #81D0FF !important;
+}
+
+.scoreboard-hud-common-head tr th,
+.hud-scoreboard,
+.hud-scoreboard table th,
+.hud-scoreboard table td {
+    font-family: 'Verdana';
+    font-size: 9pt !important;
+    font-weight: bold !important;
+}
+
+.scoreboard-hud-common-head tr th {
+    color: #FFB41E;
+}
+
+.scoreboard-hud-ct-head tr th:first-child,
+.scoreboard-hud-tr-head tr th:first-child {
+    color: transparent !important;
+}
+
+
+
+.scoreboard-hud-ct-head tr th:first-child:before {
+    content: "Counter-Terrorists";
+    color: #81D0FF !important;
+}
+
+.scoreboard-hud-tr-head tr th:first-child:before {
+    content: "Terrorists";
+    color: #FF3F3F !important;
+}
+
+
+
+.table th,
+.hud-scoreboard table td {
+    padding: unset;
+}
+
+
+.hud-scoreboard {
+    border-radius: 8px;
+    border: 1px solid rgba(255,
+            180,
+            0,
+            .5);
+    background: rgba(0,
+            0,
+            0,
+            0.5);
+}
+
+
+.scoreboard-hud-ct-head th {
+    border-top: 1px solid rgba(255,
+            180,
+            0,
+            .5);
+    /* infelizmente, a borda que separa o nome do server/ header com os times */
+    border-bottom: 1px solid #81D0FF;
+}
+
+.scoreboard-hud-tr-head th {
+    border-bottom: 1px solid #FF3F3F;
+
+}
+
+.scoreboard-hud-ct-body tr td[style="background-color: #4d9a46;"],
+.scoreboard-hud-tr-body tr td[style="background-color: #4d9a46;"],
+.scoreboard-hud-ct-body tr td[style="background-color: #547b50;"],
+.scoreboard-hud-tr-body tr td[style="background-color: #547b50;"] {
+    background-color: rgba(255,
+            255,
+            255,
+            0.15) !important;
+}
+
+.scoreboard-hud-ct-body tr td {
+    background-color: rgba(255,
+            255,
+            255,
+            0.15);
+}
+
+.scoreboard-hud-tr-body tr td,
+.scoreboard-hud-ct-body tr td {
+    background: none;
+}
+
+.scoreboard-hud-tr-body tr td[style="background-color: #505050;"],
+.scoreboard-hud-ct-body tr td[style="background-color: #505050;"] {
+    background: none !important;
+}
+
+
+.hud-scoreboard[style="display: block;"] {
+    display: none !important;
+    top: 15%;
+    bottom: 0;
+    height: 72.5%;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+}
+
+.hud-scoreboard table {
+    background: none;
+    padding: 3px;
+    border-spacing: 0px;
+}
+
+/* spec */
+.hud-spec-bar {
+    display: none;
+}
+
+/* vitals indicator - HOLY SHIT ! */
+.classic-health-indicator {
+    display: flex;
+    position: absolute;
+    z-index: 13;
+    bottom: 12px;
+    left: 12px;
+
+    mix-blend-mode: plus-lighter;
+}
+
+.classic-health-indicator .hud-health-icon {
+    background-position: -48px -25px;
+    width: 24px;
+    height: 24px;
+}
+
+.classic-health-indicator div {
+    height: 25px;
+    width: 19px;
+    background-image: url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/hud-spritesheet.png?raw=true');
+    flood-color: #704700;
+}
+
+/* classic money indicator */
+.classic-money-indicator {
+    display: flex;
+    position: absolute;
+    z-index: 13;
+    bottom: 50px;
+    right: 12px;
+
+    mix-blend-mode: plus-lighter;
+}
+
+.classic-money-indicator .hud-money-icon {
+    background-position: 64px -26px;
+    width: 18px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+.classic-money-indicator div {
+    height: 25px;
+    width: 19px;
+    background-image: url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/hud-spritesheet.png?raw=true');
+    flood-color: #704700;
+}
+
+.hud-money-fadecolor-minus {
+    animation: hud-money-fadecolor-minus 5s linear forwards;
+}
+
+@keyframes hud-money-fadecolor-minus {
+    from {
+        filter: hue-rotate(-50deg) saturate(2);
+    }
+
+    to {
+        filter: hue-rotate(0deg) saturate
+    }
+}
+
+.hud-money-fadecolor-plus {
+    animation: hud-money-fadecolor-plus 5s linear forwards;
+}
+
+@keyframes hud-money-fadecolor-plus {
+    from {
+        filter: hue-rotate(60deg) saturate(2);
+    }
+
+    to {
+        filter: hue-rotate(0deg) saturate
+    }
+}
+
+
+/* classic armor indicator */
+.classic-armor-indicator {
+    display: flex;
+    position: absolute;
+    z-index: 13;
+    bottom: 12px;
+    left: 20%;
+
+    mix-blend-mode: plus-lighter;
+}
+
+.classic-armor-indicator .hud-armor-icon {
+    background-position: -24px -25px;
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+.classic-armor-indicator div {
+    height: 25px;
+    width: 19px;
+    background-image: url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/hud-spritesheet.png?raw=true');
+    flood-color: #704700;
+}
+
+/* classic time indicator */
+.classic-time-indicator {
+    display: flex;
+    position: absolute;
+    z-index: 13;
+    bottom: 12px;
+    left: 45%;
+
+    mix-blend-mode: plus-lighter;
+
+    text-align: center;
+}
+
+.classic-time-indicator .hud-time-icon {
+    background-position: 108px -72px;
+    width: 18px;
+    height: 24px;
+}
+
+.classic-time-indicator div {
+    height: 25px;
+    width: 19px;
+    background-image: url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/hud-spritesheet.png?raw=true');
+    flood-color: #704700;
+}
+
+.hud-time-separator {
+    background-image: none !important;
+    width: 3px !important;
+    margin-right: 2px;
+    margin-left: 2px;
+}
+
+.hud-time-separator div {
+    background-image: none;
+}
+
+.hud-time-separator-tick1,
+.hud-time-separator-tick2 {
+    height: 2px !important;
+    width: 2px !important;
+    background-color: #704700;
+}
+
+.hud-time-separator-tick1 {
+    position: absolute;
+    top: 8px;
+}
+
+.hud-time-separator-tick2 {
+    position: absolute;
+    bottom: 8px;
+}
+
+/* classic ammo indicator */
+.classic-ammo-indicator {
+    position: absolute;
+    z-index: 13;
+    bottom: 12px;
+    right: 12px;
+
+    mix-blend-mode: plus-lighter;
+}
+
+.classic-ammo-indicator .hud-ammo-icon {
+    background-position: 0px -72px;
+    width: 24px;
+    height: 24px;
+}
+
+.classic-ammo-indicator div {
+    height: 25px;
+    width: 19px;
+    background-image: url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/hud-spritesheet.png?raw=true');
+}
+
+.hud-ammo-separator {
+    background-image: none !important;
+    width: 2px !important;
+    margin-left: 8px;
+    margin-right: 8px;
+    background-color: #704700;
+}
+
+/* attempt to fix the defuser/buyzone/c4 icons */
+.hud-defuser-icon,
+.hud-buyzone-icon,
+.hud-c4-icon {
+    background-image: url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/hud-spritesheet.png?raw=true');
+    color: transparent !important;
+    width: 32px !important;
+    height: 32px !important;
+    left: 10px;
+    filter: hue-rotate(60deg) saturate(2);
+}
+
+.hud-buyzone-icon {
+    background-position: -96px -148px;
+}
+
+.hud-defuser-icon {
+    background-position: -32px -148px;
+    padding-left: unset;
+}
+
+.hud-c4-icon {
+    background-position: -0px -148px;
+}
+
+/* remove */
+.hud-bomb-planted {
+    display: none !important;
+}
+
+/* animate ammo activity */
+.hud-number-activity {
+    animation: hud-number-activity 3s linear forwards;
+}
+
+@keyframes hud-number-activity {
+    from {
+        filter: brightness(2);
+    }
+
+    to {
+        filter: brightness(1);
+    }
+}
+
+/* spec */
+.hud-spec-top-bar {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 13.65%;
+    z-index: 13;
+    background: rgba(0,
+            0,
+            0,
+            0.77);
+}
+
+.hud-spec-orangebox-banner {
+    display: flex;
+    position: absolute;
+    height: 100%;
+    width: fit-content;
+    left: 5px;
+}
+
+.hud-spec-banner-image {
+    padding: 5px 0px 5px 0px;
+}
+
+
+.hud-spec-details {
+    height: fit-content;
+    display: flex;
+    position: absolute;
+    right: 20px;
+    top: 0;
+    bottom: 0;
+    margin-top: auto;
+    margin-bottom: auto;
+    color: #FFB000;
+}
+
+.hud-spec-separator {
+    width: 1px !important;
+    margin-left: 18px;
+    margin-right: 18px;
+    background-color: #704700;
+}
+
+.hud-spec-left-side {
+    text-align: right;
+}
+
+.hud-spec-right-side {
+    text-align: left;
+}
+
+.hud-spec-left-side,
+.hud-spec-right-side {
+    margin-top: 8px;
+}
+
+.hud-spec-t-win,
+.hud-spec-time-host {
+    margin-top: 2px;
+}
+
+.hud-spec-time-icon {
+    height: 16px;
+    width: 16px;
+    background: url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/timer.png?raw=true');
+}
+
+.hud-spec-time-host {
+    display: flex;
+}
+
+.hud-spec-time {
+    margin-left: 4px;
+}
+
+.hud-spec-bottom-bar {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 13.65%;
+    z-index: 13;
+    background: rgba(0,
+            0,
+            0,
+            0.77);
+}
+
+.hud-spec-nickname {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    text-align: center;
+    align-self: center;
+}
+
+/* scope */
+.hud-zoom-overlay-redpoint {
+    background: url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/scope.png?raw=true');
+    border-radius: unset;
+    height: 256px;
+    width: 256px;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.hud-zoom-overlay-vert {
+    margin-left: auto;
+    margin-right: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 1px;
+}
+
+.hud-zoom-overlay-horiz {
+    margin-top: auto;
+    margin-bottom: auto;
+    top: 2px;
+    bottom: 0px;
+    left: 0;
+    right: 0px;
+}
+
+.hud-zoom-overlay-circle {
+    border-radius: 100vh;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: fixed;
+    width: 85vh;
+    /* absolutamente retardado */
+    height: 85vh;
+    box-shadow: 0 0 0 9999px rgba(0,
+            0,
+            0,
+            1);
+}
+
+/* new money plus and minus */
+.money-diff {
+    display: flex;
+    flex-direction: column-reverse;
+    flex-wrap: wrap-reverse;
+
+    position: absolute;
+
+    width: 114px;
+    /* fixo */
+    height: 100%;
+
+    right: 12px;
+    bottom: 80px;
+
+    z-index: 12;
+
+    mix-blend-mode: plus-lighter;
+}
+
+.money_plus div,
+.money_minus div {
+    background-image: url('https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/hud-spritesheet.png?raw=true');
+    height: 25px;
+    width: 19px;
+}
+
+.money_plus,
+.money_minus {
+    display: flex !important;
+    left: unset !important;
+    right: 0 !important;
+    position: relative !important;
+}
+
+.money_plus {
+    filter: hue-rotate(60deg) saturate(2);
+}
+
+.money_minus {
+    filter: hue-rotate(-50deg) saturate(2);
+    margin-left: 5px;
+}
+
+.hud-money-plus-icon {
+    width: 18px !important;
+    height: 23px !important;
+    background-position: 34px -25px;
+}
+
+.hud-money-minus-icon {
+    width: 15px !important;
+    height: 23px !important;
+    background-position: 48px -25px;
+}
+
+.hud-fadeout {
+    animation: hud-fadeout 5s linear forwards;
+}
+
+@keyframes hud-fadeout {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+
+/* net graph */
+.hud-net-graph {
+    z-index: 50;
+    position: absolute;
+    color: #E5E5B2;
+    text-shadow: 1px 1px 0px black;
+    flex-wrap: wrap;
+    width: 135px;
+    line-height: 1.5em;
+    height: fit-content;
+    bottom: 35px;
+    left: 0;
+    right: 0;
+    padding-left: 12px;
+}
+
+.hud-net-graph-fps {
+    margin-right: 18px;
+}
+
+/* amx mod menu */
+#amxmodmenu {
+    right: 50px;
+    padding: 5px;
+    margin-left: 10px !important;
+    color: var(--hud-color);
+    display: none;
+}
+
+#amxmodmenu i {
+    margin-right: unset;
+}
+
+
+/* classic tab */
+.hud-classic-scoreboard {
+    z-index: 25;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+
+    display: none;
+    /* start out hidden */
+    flex-direction: column;
+
+    height: fit-content;
+    min-height: 70%;
+    width: 81.25%;
+    background: rgba(0,
+            0,
+            0,
+            0.5);
+
+    /* border */
+    border: 1px solid rgba(168,
+            103,
+            0,
+            .75);
+    border-top-left-radius: 12px 10px;
+    /* could we do with only one border radius? yes. but it looks uneven in real 1.6 */
+    border-top-right-radius: 12px 10px;
+    border-bottom-left-radius: 12px 10px;
+    border-bottom-right-radius: 12px 10px;
+}
+
+.hud-scoreboard-top-header {
+    display: flex;
+    flex-wrap: nowrap;
+    height: fit-content;
+    align-items: center;
+    justify-content: space-between;
+    color: #FFB000;
+    margin-left: 6px;
+    margin-right: 6px;
+    margin-top: -3px;
+    /* eyes watering yet? */
+    padding-bottom: 2px;
+    border-bottom: 1px solid rgba(168,
+            103,
+            0,
+            .75);
+}
+
+.hud-scoreboard-server-name {
+    flex-grow: 1;
+    text-align: left;
+}
+
+.hud-scoreboard-scores,
+.hud-scoreboard-deaths,
+.hud-scoreboard-latency {
+    text-align: right;
+    margin-top: 8px;
+}
+
+.hud-scoreboard-scores,
+.hud-scoreboard-deaths {
+    margin-right: 12px;
+}
+
+
+.hud-scoreboard-ct-header {
+    margin-top: 12px;
+}
+
+.hud-scoreboard-ct-header,
+.hud-scoreboard-tr-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 6px;
+    margin-right: 6px;
+    margin-bottom: 2px;
+    padding-bottom: 2px;
+}
+
+/* mostly header alignment stuff */
+.hud-scoreboard-tr-score,
+.hud-scoreboard-tr-latency,
+.hud-scoreboard-ct-score,
+.hud-scoreboard-ct-latency {
+    text-align: right;
+}
+
+.hud-scoreboard-tr-count,
+.hud-scoreboard-ct-count {
+    flex-grow: 1;
+    text-align: left;
+}
+
+.hud-scoreboard-ct-score,
+.hud-scoreboard-tr-score {
+    width: 38px;
+    margin-right: 70px;
+    /* 2x 12px padding + 46px of the "deaths" text */
+}
+
+.hud-scoreboard-ct-latency,
+.hud-scoreboard-tr-latency {
+    width: 52px;
+}
+
+.hud-scoreboard-ct-header {
+    color: #81D0FF;
+    border-bottom: 1px solid #81D0FF;
+}
+
+.hud-scoreboard-tr-header {
+    color: #FF3F3F;
+    border-bottom: 1px solid #FF3F3F;
+}
+
+.hud-scoreboard-player {
+    display: flex;
+    margin-left: 4px;
+    margin-right: 6px;
+    padding-left: 6px;
+
+    align-items: center;
+    justify-content: space-between;
+}
+
+.hud-scoreboard-player-playername {
+    flex-grow: 1;
+    text-align: left;
+}
+
+.hud-scoreboard-player-deaths,
+.hud-scoreboard-player-score,
+.hud-scoreboard-player-status,
+.hud-scoreboard-player-latency {
+    text-align: right;
+}
+
+.hud-scoreboard-player-latency {
+    width: 52px;
+}
+
+.hud-scoreboard-player-deaths,
+.hud-scoreboard-player-status {
+    width: 46px;
+}
+
+.hud-scoreboard-player-score {
+    width: 38px;
+}
+
+.hud-scoreboard-player-deaths,
+.hud-scoreboard-player-score,
+.hud-scoreboard-player-status {
+    margin-right: 12px;
+}
+
+.hud-scoreboard-ct-players,
+.hud-scoreboard-tr-players {
+    margin-bottom: 1.25%;
+}
+
+.hud-scoreboard-player {
+    min-height: 15px;
+}
+
+/* messages - damage, attackers */
+.hud-screen-message {
+    background: none;
+    z-index: 23;
+    font-family: 'Trebuchet MS';
+    font-size: 15px;
+    font-weight: bold;
+    color: rgba(168,
+            103,
+            0) !important;
+    mix-blend-mode: plus-lighter;
+}

@@ -1,12 +1,12 @@
 // SteamLike HUD : by KfH-- and Henri (hen.fs), parts of code by nosferati (author of PLAY-CS)
-// Last updated: 30/12/2024
+// Last updated: 31/12/2024
 
 // TO DO: de-jQuerify the living hell out of this codebase
 
 // options
 
-var net_graph = 0;      // Enables net_graph. NOTICE: the "in", "out", "loss" and "choke" values are purely cosmetic, They don't mean anything. The only real values are the FPS and ping.
-var net_graphpos = 1;   // Sets the position of the net graph. 1 = Right, 2 = Center, 3 = Left
+var net_graph = 1;      // Enables net_graph. NOTICE: the "in", "out", "loss" and "choke" values are purely cosmetic, They don't mean anything. The only real values are the FPS and ping.
+var net_graphpos = 2;   // Sets the position of the net graph. 1 = Right, 2 = Center, 3 = Left
 
 // password screen
 const pWordScreen = document.querySelector('#server_full'); // AFAIK #server_full2 are the ACTUAL server full/kick screens
@@ -399,7 +399,7 @@ function refreshScoreboard(){
         2: 0    // ct skill total
     };
     
-    var players_total = {   // number of players in each team
+    const players_total = {   // number of players in each team
         1: 0,   // tr count
         2: 0    // ct count
     };
@@ -429,29 +429,40 @@ function refreshScoreboard(){
         return 0;
     });
     
+    const clanTags = [
+        {tag: '[inf]', image: 'https://github.com/kfh83/SteamLike-HUD/blob/main/UserPictures/iNF.png?raw=true'},
+        {tag: '[air]', image: 'https://github.com/kfh83/SteamLike-HUD/blob/main/UserPictures/AIR.png?raw=true'},
+        {tag: '[phx]', image: 'https://github.com/kfh83/SteamLike-HUD/blob/main/UserPictures/PhX.png?raw=true'},
+        {tag: '[lag]', image: 'https://github.com/kfh83/SteamLike-HUD/blob/main/UserPictures/LAG.png?raw=true'},
+        {tag: '[afk]', image: 'https://github.com/kfh83/SteamLike-HUD/blob/main/UserPictures/AFK.png?raw=true'},
+        {tag: 'ob$cur0', image: 'https://github.com/kfh83/SteamLike-HUD/blob/main/UserPictures/OB$.png?raw=true'},
+    ]
+
+    
     // memberInfo.name = player name
     // memberInfo.status = dead/bomb/vip?
     // memberInfo.frags = player score
     // memberInfo.deaths = player deaths
     // memberInfo.ping = player latency
+    
+    const regex = /^Player \d+$/; // this is needed so we can label players as nosteam (no profile image whatsoever)
 
     
     players.forEach(function(player, index){   // original had a "dummy" argument, which is the index
         var style="background: none;";   // sets inline styles on the td of the player, however we aren't using tables. Will see what to do about this
         var id = player.id; // the id of the player passed through the function
         var memberInfo = g_PlayerExtraInfo[id]; // see comments before this statement
+        const lowercasedName = memberInfo.name.toLowerCase();
         
         if (memberInfo.teamnumber !== "undefined" && memberInfo.skill != '-') {     // if member is in a team and their skill is properly defined (takes a while for this to be defined)
             skill_total[memberInfo.teamnumber] += memberInfo.skill;     // adds this member's skill to the skill_total of their team
-            latency_total[memberInfo.teamnumber] += Number(memberInfo.ping);    // adds this member's latency to the latency_total of their team. Needs to be converted to a number in this case because its a string in nature
-            
             players_total[memberInfo.teamnumber]++;     // ups the counts of players in member's team
+            latency_total[memberInfo.teamnumber] += Number(memberInfo.ping);    // adds this member's latency to the latency_total of their team. Needs to be converted to a number in this case because its a string in nature
         }
         
         if(!memberInfo.name){   // if the member has no name
             return;     // ... goodbye?
         }
-        
         
         if (id == CS_ENV.myXashId) { // if the id matches with your own id...
             style = 'background: rgba(255, 255, 255, 0.1);';
@@ -460,12 +471,62 @@ function refreshScoreboard(){
         // for each, we are going to append a player...
         
         const playerHost = document.createElement('div'); playerHost.classList.add('hud-scoreboard-player');    // this is done here because of interference when done outside w/ a cloned node
+            const playerPictureHost = document.createElement('div'); playerPictureHost.classList.add('hud-scoreboard-player-pfpcontainer'); playerHost.appendChild(playerPictureHost);
+                const playerPicture = document.createElement('img'); playerPicture.classList.add('hud-scoreboard-player-pfp'); playerPictureHost.appendChild(playerPicture);
             const playerName = document.createElement('div'); playerName.classList.add('hud-scoreboard-player-playername'); playerHost.appendChild(playerName);
             const playerIndicator = document.createElement('div'); playerIndicator.classList.add('hud-scoreboard-player-status'); playerHost.appendChild(playerIndicator);
             const playerScore = document.createElement('div'); playerScore.classList.add('hud-scoreboard-player-score'); playerHost.appendChild(playerScore);
             const playerDeath = document.createElement('div'); playerDeath.classList.add('hud-scoreboard-player-deaths'); playerHost.appendChild(playerDeath);
             const playerLatency = document.createElement('div'); playerLatency.classList.add('hud-scoreboard-player-latency'); playerHost.appendChild(playerLatency);
             
+        
+        // to do: comment this part
+        
+        if (window.innerWidth <= 640) {
+            playerPictureHost.style.width = '21px';
+            playerPictureHost.style.height = '20px';
+        } else if (window.innerWidth <= 800) {
+            playerPictureHost.style.width = '24px';
+            playerPictureHost.style.height = '23px';
+        } else if (window.innerWidth >= 1024) {
+            playerPictureHost.style.width = '32px';
+            playerPictureHost.style.height = '32px';
+        }
+        
+        if (players.length > 10) {
+            let excessPlayers = players.length - 10;
+        
+            let currentWidth = parseFloat(playerPictureHost.style.width);
+            let currentHeight = parseFloat(playerPictureHost.style.height);
+        
+            for (let i = 0; i < excessPlayers; i++) {
+                if (currentWidth > 15 && currentHeight > 14) {
+                    currentWidth -= 1;
+                    currentHeight -= 1;
+                }
+            }
+            
+            console.log(currentWidth);
+        
+            playerPictureHost.style.width = currentWidth + 'px';
+            playerPictureHost.style.height = currentHeight + 'px';
+        }
+        
+            
+        playerPicture.src = 'https://github.com/kfh83/SteamLike-HUD/blob/main/UserPictures/noclan.png?raw=true';
+        
+        
+        if (regex.test(memberInfo.name)) {
+            playerPictureHost.removeChild(playerPicture);
+        } else {
+            for (const item of clanTags) {
+                if (lowercasedName.includes(item.tag)) {
+                    playerPicture.src = item.image;
+                    break;
+                }
+            }
+        }
+
         playerName.innerText = memberInfo.name;
         if(typeof memberInfo.status !== 'undefined'){
             playerIndicator.innerText = memberInfo.status;  // somehow you can get stuck between heaven and hell in counter strike and be undefined
@@ -484,6 +545,13 @@ function refreshScoreboard(){
             counterPlayers.appendChild(playerHost);
         }
         
+        
+        let totalMargin = playerPictureHost.offsetWidth + 16;   // playerpicturehost + 14px margin on the player + 2px of margin on the player name from the user picture
+        
+        if(totalMargin != 16){  // mitigate it being weird everytime you press tab
+            ctPlayerCount.style.marginLeft = `${totalMargin}px`;
+            trPlayerCount.style.marginLeft = `${totalMargin}px`;
+        }
     });
     
     trPlayerCount.textContent = 'Terrorists\u00A0\u00A0\u00A0\u00A0-\u00A0\u00A0\u00A0\u00A0' + players_total[1] + ' players';
@@ -502,6 +570,9 @@ function refreshScoreboard(){
     if(!Number.isNaN(trLatencyAverage)){
         trLatencies.innerText = trLatencyAverage;
     }
+
+    
+
 }
 
 

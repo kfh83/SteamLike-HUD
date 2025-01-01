@@ -1,5 +1,5 @@
-* SteamLike HUD - By: KfH--, Henri (hen.fs), TRACK */
-/* Last updated: 31/12/2024 */
+/* SteamLike HUD - By: KfH--, Henri (hen.fs), TRACK */
+/* Last updated: 1/1/2025 */
 /* TODO: MAJOR cleanup, commenting */
 :root {
     --hud-color: #704700;
@@ -1723,6 +1723,7 @@ p {
     margin-top: -3px;
     /* eyes watering yet? */
     padding-bottom: 2px;
+	padding-right: 6px;
     border-bottom: 1px solid rgba(168,
             103,
             0,
@@ -1752,7 +1753,8 @@ p {
 }
 
 .hud-scoreboard-ct-header,
-.hud-scoreboard-tr-header {
+.hud-scoreboard-tr-header,
+.hud-scoreboard-spec-header{
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -1798,6 +1800,14 @@ p {
     color: #FF3F3F;
     border-bottom: 1px solid #FF3F3F;
 }
+	
+.hud-scoreboard-spec-header{
+	color: #FFB000;
+	border-bottom: 1px solid rgba(168,
+            103,
+            0,
+            .75);
+}
 
 .hud-scoreboard-player {
     display: flex;
@@ -1840,8 +1850,13 @@ p {
 }
 
 .hud-scoreboard-ct-players,
-.hud-scoreboard-tr-players {
+.hud-scoreboard-tr-players,
+.hud-scoreboard-spec-players{
     margin-bottom: 1.25%;
+}
+	
+.hud-scoreboard-spec-players{
+	color: #CCCCCC;
 }
 
 .hud-scoreboard-player {
@@ -1853,13 +1868,18 @@ p {
 .hud-scoreboard-player-pfpcontainer{
 	margin-top: 1px;
 	margin-right: 4px;
-	margin-left: 14px;
 }
 	
 .hud-scoreboard-player-pfp{
 	width: 100%;
 	height: 100%;
 	image-rendering: pixelated;
+}
+	
+.hud-scoreboard-player-friendcontainer{
+	display: flex;
+	width: fit-content;
+	opacity: 0;
 }
 	
 	

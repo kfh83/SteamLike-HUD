@@ -1,13 +1,22 @@
 // SteamLike HUD : by KfH-- and Henri (hen.fs), parts of code by nosferati (author of PLAY-CS)
-// Last updated: 31/12/2024
+// Last updated: 1/1/2025
 
 // TO DO: de-jQuerify the living hell out of this codebase
 
 // options
 
-var net_graph = 1;      // Enables net_graph. NOTICE: the "in", "out", "loss" and "choke" values are purely cosmetic, They don't mean anything. The only real values are the FPS and ping.
-var net_graphpos = 2;   // Sets the position of the net graph. 1 = Right, 2 = Center, 3 = Left
+const net_graph = 0;                        // Enables net_graph. NOTICE: the "in", "out", "loss" and "choke" values are purely cosmetic, They don't mean anything. The only real values are the FPS and ping.
+const net_graphpos = 1;                     // Sets the position of the net graph. 1 = Right, 2 = Center, 3 = Left
 
+const friend_clan = '';              // if you do not have a clan tag but still want the friend indicator to appear on members of another (known) clan, you can input their tag (including [] if applicable).
+                                            // current known clans: '[AIR]', '[PhX]', '[iNf]', '[LAG]', '[AFK]', 'OB$CUR0'
+                                            // check clanTags if you wish to add more clans/respective images
+                          
+const fake_spec_enable = true;                // shows a fake spectator to make scoreboard look a bit more complete. Sadly play-cs doesn't really support "true" spectators, so this will have to do in the meanwhile.
+    const fake_spec_name = 'HUD by @kfh83 -- enjoy!';      // set the name for the fake spectator
+    const fake_spec_picture = 'https://github.com/kfh83/SteamLike-HUD/blob/main/UserPictures/specpicture.png?raw=true';             // URL for fake spectator's profile picture
+    const fake_spec_isfriend = true;          // display friend indicator on spectator
+                          
 // password screen
 const pWordScreen = document.querySelector('#server_full'); // AFAIK #server_full2 are the ACTUAL server full/kick screens
 const pWordField = document.querySelector("#f-code");    // self explanatory. Password input field
@@ -87,8 +96,6 @@ cancelButton.href = "https://play-cs.com/";
 cancelButton.classList.add("loading-cancel-button");
 cancelButton.innerText = "Cancel";
 document.querySelector(".loading-main").insertBefore(cancelButton, document.querySelector(".loading_control_block"));
-
-
 
 
 // variables used later on in game functionality.
@@ -349,8 +356,7 @@ const hudServerMessage = document.querySelector('.hud-server-message');
 const hudStatusBar = document.querySelector('.hud-statusbar');
 const hudC4Message = document.querySelector('.hud-message');
 
-// SCOREBOARD - 30/12
-// TO DO: profile pictures
+// SCOREBOARD - 1/1
 
 const hudContainer = document.querySelector(".hud-container");  // HUD elements container
 
@@ -384,6 +390,29 @@ const scoreboardHost = document.createElement('div'); scoreboardHost.classList.a
     
     const terroristPlayers = document.createElement('div'); terroristPlayers.classList.add('hud-scoreboard-tr-players'); scoreboardHost.appendChild(terroristPlayers);  // Terrorists player container
     
+    const spectatorHeader = document.createElement('div'); spectatorHeader.classList.add('hud-scoreboard-spec-header');       // Fake spectators header container
+        const spectatorCount = document.createElement('div'); spectatorCount.classList.add('hud-scoreboard-spec-count'); spectatorHeader.appendChild(spectatorCount);        
+            spectatorCount.textContent = 'Spectators';                                                                                       
+            
+    const spectatorPlayers = document.createElement('div'); spectatorPlayers.classList.add('hud-scoreboard-spec-players'); // Fake spectators container
+    if(fake_spec_enable){
+        scoreboardHost.appendChild(spectatorHeader);
+        scoreboardHost.appendChild(spectatorPlayers); 
+    }
+    
+    const specPlayerHost = document.createElement('div'); specPlayerHost.classList.add('hud-scoreboard-player'); spectatorPlayers.appendChild(specPlayerHost);
+        const specFriendContainer = document.createElement('div'); specFriendContainer.classList.add('hud-scoreboard-player-friendcontainer'); specPlayerHost.appendChild(specFriendContainer);                   // contains friend indicator image
+            if(fake_spec_isfriend){
+                specFriendContainer.style.opacity = '100';
+            }
+            const specFriendIndicator = document.createElement('img'); specFriendIndicator.classList.add('hud-scoreboard-player-friendindicator'); specFriendContainer.appendChild(specFriendIndicator);    // actual indicator image
+                specFriendIndicator.src = 'https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/friend.png?raw=true'
+        const specPictureHost = document.createElement('div'); specPictureHost.classList.add('hud-scoreboard-player-pfpcontainer'); specPlayerHost.appendChild(specPictureHost);                                  // contains profile picture
+            const specPicture = document.createElement('img'); specPicture.classList.add('hud-scoreboard-player-pfp'); specPictureHost.appendChild(specPicture);                                            // actual profile picture image element
+                specPicture.src = fake_spec_picture;
+        const specNickname = document.createElement('div'); specNickname.classList.add('hud-scoreboard-player-playername'); specPlayerHost.appendChild(specNickname);                                                         // player name
+            specNickname.innerText = fake_spec_name;
+     
 
 // partial rewrite of updateScoreBoard
 
@@ -429,7 +458,7 @@ function refreshScoreboard(){
         return 0;
     });
     
-    const clanTags = [
+    const clanTags = [  // tag in lowercase, url to image corresponding to this clan
         {tag: '[inf]', image: 'https://github.com/kfh83/SteamLike-HUD/blob/main/UserPictures/iNF.png?raw=true'},
         {tag: '[air]', image: 'https://github.com/kfh83/SteamLike-HUD/blob/main/UserPictures/AIR.png?raw=true'},
         {tag: '[phx]', image: 'https://github.com/kfh83/SteamLike-HUD/blob/main/UserPictures/PhX.png?raw=true'},
@@ -448,16 +477,19 @@ function refreshScoreboard(){
     const regex = /^Player \d+$/; // this is needed so we can label players as nosteam (no profile image whatsoever)
 
     
-    players.forEach(function(player, index){   // original had a "dummy" argument, which is the index
-        var style="background: none;";   // sets inline styles on the td of the player, however we aren't using tables. Will see what to do about this
-        var id = player.id; // the id of the player passed through the function
+    players.forEach(function(player, index){    // original had a "dummy" argument, which is the index
+        var style="background: none;";          // sets inline styles on the td of the player, however we aren't using tables. Will see what to do about this
+        var id = player.id;                     // the id of the player passed through the function
         var memberInfo = g_PlayerExtraInfo[id]; // see comments before this statement
-        const lowercasedName = memberInfo.name.toLowerCase();
         
-        if (memberInfo.teamnumber !== "undefined" && memberInfo.skill != '-') {     // if member is in a team and their skill is properly defined (takes a while for this to be defined)
-            skill_total[memberInfo.teamnumber] += memberInfo.skill;     // adds this member's skill to the skill_total of their team
-            players_total[memberInfo.teamnumber]++;     // ups the counts of players in member's team
+        const lowercasedName = memberInfo.name.toLowerCase();                   // used later to check for clan tag
+        const myName = g_PlayerExtraInfo[CS_ENV.myXashId].name.toLowerCase();   // used later to gather friends based on clan tag
+        
+        
+        if (memberInfo.teamnumber !== "undefined") {                            // if member is in a team 
+            skill_total[memberInfo.teamnumber] += memberInfo.skill;             // adds this member's skill to the skill_total of their team
             latency_total[memberInfo.teamnumber] += Number(memberInfo.ping);    // adds this member's latency to the latency_total of their team. Needs to be converted to a number in this case because its a string in nature
+            players_total[memberInfo.teamnumber]++;                             // ups the counts of players in member's team
         }
         
         if(!memberInfo.name){   // if the member has no name
@@ -465,75 +497,91 @@ function refreshScoreboard(){
         }
         
         if (id == CS_ENV.myXashId) { // if the id matches with your own id...
-            style = 'background: rgba(255, 255, 255, 0.1);';
+            style = 'background: rgba(255, 255, 255, 0.1);';    // subtle highlight
         }
         
         // for each, we are going to append a player...
         
         const playerHost = document.createElement('div'); playerHost.classList.add('hud-scoreboard-player');    // this is done here because of interference when done outside w/ a cloned node
-            const playerPictureHost = document.createElement('div'); playerPictureHost.classList.add('hud-scoreboard-player-pfpcontainer'); playerHost.appendChild(playerPictureHost);
-                const playerPicture = document.createElement('img'); playerPicture.classList.add('hud-scoreboard-player-pfp'); playerPictureHost.appendChild(playerPicture);
-            const playerName = document.createElement('div'); playerName.classList.add('hud-scoreboard-player-playername'); playerHost.appendChild(playerName);
-            const playerIndicator = document.createElement('div'); playerIndicator.classList.add('hud-scoreboard-player-status'); playerHost.appendChild(playerIndicator);
-            const playerScore = document.createElement('div'); playerScore.classList.add('hud-scoreboard-player-score'); playerHost.appendChild(playerScore);
-            const playerDeath = document.createElement('div'); playerDeath.classList.add('hud-scoreboard-player-deaths'); playerHost.appendChild(playerDeath);
-            const playerLatency = document.createElement('div'); playerLatency.classList.add('hud-scoreboard-player-latency'); playerHost.appendChild(playerLatency);
+            const playerFriendContainer = document.createElement('div'); playerFriendContainer.classList.add('hud-scoreboard-player-friendcontainer'); playerHost.appendChild(playerFriendContainer);                   // contains friend indicator image
+                const playerFriendIndicator = document.createElement('img'); playerFriendIndicator.classList.add('hud-scoreboard-player-friendindicator'); playerFriendContainer.appendChild(playerFriendIndicator);    // actual indicator image
+                    playerFriendIndicator.src = 'https://github.com/kfh83/SteamLike-HUD/blob/main/Assets/friend.png?raw=true'
+            const playerPictureHost = document.createElement('div'); playerPictureHost.classList.add('hud-scoreboard-player-pfpcontainer'); playerHost.appendChild(playerPictureHost);                                  // contains profile picture
+                const playerPicture = document.createElement('img'); playerPicture.classList.add('hud-scoreboard-player-pfp'); playerPictureHost.appendChild(playerPicture);                                            // actual profile picture image element
+            const playerName = document.createElement('div'); playerName.classList.add('hud-scoreboard-player-playername'); playerHost.appendChild(playerName);                                                         // player name
+            const playerIndicator = document.createElement('div'); playerIndicator.classList.add('hud-scoreboard-player-status'); playerHost.appendChild(playerIndicator);                                              // 'Dead', 'Bomb'
+            const playerScore = document.createElement('div'); playerScore.classList.add('hud-scoreboard-player-score'); playerHost.appendChild(playerScore);                                                           // frags
+            const playerDeath = document.createElement('div'); playerDeath.classList.add('hud-scoreboard-player-deaths'); playerHost.appendChild(playerDeath);                                                          // deaths
+            const playerLatency = document.createElement('div'); playerLatency.classList.add('hud-scoreboard-player-latency'); playerHost.appendChild(playerLatency);                                                   // ping
             
         
         // to do: comment this part
         
-        if (window.innerWidth <= 640) {
-            playerPictureHost.style.width = '21px';
-            playerPictureHost.style.height = '20px';
-        } else if (window.innerWidth <= 800) {
-            playerPictureHost.style.width = '24px';
-            playerPictureHost.style.height = '23px';
-        } else if (window.innerWidth >= 1024) {
+        
+        // this might be better with height instead of width... to do
+        
+        if (window.innerWidth <= 640) {                 // if resolution width below or equal to 640 (i.e 640x480)
+            playerPictureHost.style.width = '21px';     // yes these are odd sizes, i'm kind of replicating what real 1.6 does
+            playerPictureHost.style.height = '20px';    // 21x20
+        } else if (window.innerWidth <= 800) {          // if resolution width is below or equal to 800 (i.e 800x600)
+            playerPictureHost.style.width = '24px';     
+            playerPictureHost.style.height = '23px';    // 24x23
+        } else if (window.innerWidth >= 1024) {         // if resolution is above or equal to 1024 (i.e 1024x768)
             playerPictureHost.style.width = '32px';
-            playerPictureHost.style.height = '32px';
+            playerPictureHost.style.height = '32px';    // 32x32
         }
         
-        if (players.length > 10) {
-            let excessPlayers = players.length - 10;
         
-            let currentWidth = parseFloat(playerPictureHost.style.width);
+        
+        if (players.length > 10) {                                              // if the match has in total more than 10 players (both teams accounted for)
+            let excessPlayers = players.length - 10;                            // players in excess
+        
+            let currentWidth = parseFloat(playerPictureHost.style.width);       // current dimensions for the player picture host, defined earlier based on the resolution
             let currentHeight = parseFloat(playerPictureHost.style.height);
         
-            for (let i = 0; i < excessPlayers; i++) {
+            for (let i = 0; i < excessPlayers; i++) {                           // for every player in excess, subtract 1px from dimensions till the minimum size of 15x14 (weird size again, i know)  
                 if (currentWidth > 15 && currentHeight > 14) {
                     currentWidth -= 1;
                     currentHeight -= 1;
                 }
             }
-            
-            console.log(currentWidth);
         
-            playerPictureHost.style.width = currentWidth + 'px';
+            playerPictureHost.style.width = currentWidth + 'px';                // set the new dimensions
             playerPictureHost.style.height = currentHeight + 'px';
         }
         
+        specPictureHost.style.height = playerPictureHost.style.height;
+        specPictureHost.style.width = playerPictureHost.style.width;
+        
+        playerFriendContainer.style.height = playerPictureHost.style.height;    // i thought i wouldn't need to do this in JS? sets the height of the friend indicator, the width is handled on CSS
+        specFriendContainer.style.height = playerPictureHost.style.height;
             
-        playerPicture.src = 'https://github.com/kfh83/SteamLike-HUD/blob/main/UserPictures/noclan.png?raw=true';
+        playerPicture.src = 'https://github.com/kfh83/SteamLike-HUD/blob/main/UserPictures/noclan.png?raw=true';    // for now, use no clan image
         
         
-        if (regex.test(memberInfo.name)) {
-            playerPictureHost.removeChild(playerPicture);
+        if (regex.test(memberInfo.name)) {      // if the name perfectly matches the model of "Player (int)"
+            playerPictureHost.removeChild(playerPicture);   // remove the user picture
         } else {
-            for (const item of clanTags) {
-                if (lowercasedName.includes(item.tag)) {
-                    playerPicture.src = item.image;
+            for (const item of clanTags) {      // go through the clan tags...
+                if (lowercasedName.includes(item.tag)) {    //... check if username (in lowercase) has a tag thats known
+                    playerPicture.src = item.image;         // sets it to the corresponding image defined
+                    
+                    if(item.tag == friend_clan.toLowerCase() || myName.includes(item.tag) && id != CS_ENV.myXashId){    // if the tag matches our defined friendly clan or this user has the same tag as yourself and it's not you (so you don't appear with an indicator)
+                        playerFriendContainer.style.opacity = '100';                                                    // wow this is awful!!!! we are setting opacity!!! 
+                    }
                     break;
                 }
             }
         }
 
-        playerName.innerText = memberInfo.name;
-        if(typeof memberInfo.status !== 'undefined'){
+        playerName.innerText = memberInfo.name;             // set player name in scoreboard
+        if(typeof memberInfo.status !== 'undefined'){ 
             playerIndicator.innerText = memberInfo.status;  // somehow you can get stuck between heaven and hell in counter strike and be undefined
         }
-        playerScore.innerText = memberInfo.frags;
-        playerDeath.innerText = memberInfo.deaths;
-        playerLatency.innerText = memberInfo.ping;
+        
+        playerScore.innerText = memberInfo.frags;           // set frags in scoreboard
+        playerDeath.innerText = memberInfo.deaths;          // set deaths in scoreboard
+        playerLatency.innerText = memberInfo.ping;          // set latency in scoreboard
         
         playerHost.setAttribute('style', style);    // could definitely be done better, i'm just following kinda what the original code did here
         
@@ -546,29 +594,30 @@ function refreshScoreboard(){
         }
         
         
-        let totalMargin = playerPictureHost.offsetWidth + 16;   // playerpicturehost + 14px margin on the player + 2px of margin on the player name from the user picture
+        let totalMargin = playerPictureHost.offsetWidth + playerFriendContainer.offsetWidth + 2;   // playerpicturehost + playerFriendContainer + 2px of margin on the player name from the user picture
         
-        if(totalMargin != 16){  // mitigate it being weird everytime you press tab
+        if(totalMargin != 2){  // mitigate it being weird everytime you press tab
             ctPlayerCount.style.marginLeft = `${totalMargin}px`;
             trPlayerCount.style.marginLeft = `${totalMargin}px`;
+            spectatorCount.style.marginLeft = `${totalMargin}px`;
         }
     });
     
     trPlayerCount.textContent = 'Terrorists\u00A0\u00A0\u00A0\u00A0-\u00A0\u00A0\u00A0\u00A0' + players_total[1] + ' players';
     ctPlayerCount.textContent = 'Counter-Terrorists\u00A0\u00A0\u00A0\u00A0-\u00A0\u00A0\u00A0\u00A0' + players_total[2] + ' players';
     
-    ctRoundScore.innerText = ctScore.innerText;     // defined in main JS
-    trRoundScore.innerText = trScore.innerText;     // defined in main JS
+    ctRoundScore.innerText = ctScore.innerText;     // relies on the old ugly hacks we did for the old scoreboard
+    trRoundScore.innerText = trScore.innerText;     // this sets the scores for the teams
     
-    let ctLatencyAverage = Math.round(latency_total[2] / players_total[2]);
-    let trLatencyAverage = Math.round(latency_total[1] / players_total[1]);
+    let ctLatencyAverage = Math.round(latency_total[2] / players_total[2]);     // set latency average for counter-terrorists in scoreboard
+    let trLatencyAverage = Math.round(latency_total[1] / players_total[1]);     // set latency average for terrorists in scoreboard
     
-    if(!Number.isNaN(ctLatencyAverage)){
-        ctLatencies.innerText = ctLatencyAverage;
+    if(!Number.isNaN(ctLatencyAverage)){        
+        ctLatencies.innerText = ctLatencyAverage;       // by default the text for the latencies is '-', so might aswell not set anything if the latencies are NaN (undefined)
     }
     
     if(!Number.isNaN(trLatencyAverage)){
-        trLatencies.innerText = trLatencyAverage;
+        trLatencies.innerText = trLatencyAverage;       // same thing above
     }
 
     
